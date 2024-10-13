@@ -1,0 +1,37 @@
+{#
+/**
+ * @file
+ * Default theme implementation for a fieldgroup html element.
+ *
+ * Available variables:
+ * - title: Title of the group.
+ * - title_element: Element to wrap the title.
+ * - children: The children of the group.
+ * - wrapper_element: The html element to use
+ * - attributes: A list of HTML attributes for the group wrapper.
+ *
+ * @see template_preprocess_field_group_html_element()
+ *
+ * @ingroup themeable
+ */
+#}
+<!-- Modal -->
+<{{ wrapper_element }} {{ attributes }} id="pxc-foam-comments-{{ nodeId }}" tabindex="-1" aria-labelledby="pxc-foam-commentsLabel-{{ nodeId }}" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="pxc-foam-commentsLabel-{{ nodeId }}">
+            {% if title %}
+            <{{ title_element }}{{ title_attributes }}>{{ title }}</{{ title_element }}>
+            {% endif %}
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {{children}}
+      </div>
+    </div>
+  </div>
+</div>
+</{{ wrapper_element }}>
+

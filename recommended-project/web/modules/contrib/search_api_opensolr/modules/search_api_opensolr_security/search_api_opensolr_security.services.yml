@@ -1,0 +1,4 @@
+services:
+  search_api_opensolr.client_security:
+    parent: search_api_opensolr.base
+    class: '\Drupal\search_api_opensolr_security\OpenSolrApi\Components\OpenSolrSecurity'

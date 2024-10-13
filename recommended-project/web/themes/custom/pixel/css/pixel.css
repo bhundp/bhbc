@@ -1,0 +1,205 @@
+
+
+
+
+
+
+
+
+
+
+/* --------------------------------------------------------------- */
+/* General y utilidades */
+.oculto {
+    display:none !important;
+}
+.opaco {
+    animation: toOpaque 1s;
+    animation-iteration-count: 1
+}
+
+
+
+
+
+
+
+
+/* --------------------------------------------------------------- */
+/* Branding */
+#block-pixel-marcadelsitio img {
+    width:100%;
+}
+
+
+
+
+
+
+
+
+
+/* ---------------------------------------------------------------- */
+/* Objetos utiles */
+.pxc-contenedor-blanco {
+    margin-top:1.5rem;
+    margin-bottom:1.5rem;
+    padding:2.5rem;
+    background-color:#ffffff;
+    -webkit-box-shadow: 1px 1px 12px -1px rgba(0,0,0,0.25);
+    -moz-box-shadow: 1px 1px 12px -1px rgba(0,0,0,0.25);
+    box-shadow: 1px 1px 12px -1px rgba(0,0,0,0.25);
+    border-radius:.5rem;
+}
+.pxc-linea-separadora {
+    margin:2rem 0;
+}
+.pxc-micro-aviso strong {
+    color:#0037c5;
+    text-transform:uppercase;
+}
+.pxc-titulo-spacer {
+    height:75px;
+}
+
+
+
+
+
+
+
+/* --------------------------------------------------------------- */
+/* Layout general */
+html, body {
+    background-color:rgba(238,238,238,1);
+}
+/* header */
+#header {
+    background-color:#f8f8f8;
+    -webkit-box-shadow: -1px -8px 36px 7px rgba(0,0,0,0.25);
+    -moz-box-shadow: -1px -8px 36px 7px rgba(0,0,0,0.25);
+    box-shadow: -1px -8px 36px 7px rgba(0,0,0,0.25);
+}
+.pxc-sticky-header {
+    position:fixed;
+    top:0;
+    width:100%;
+    z-index:10;
+}
+.pxc-sticky-header-collapsed {
+    
+}
+.pxc-branding img {
+    max-width:170px; height:auto;
+    position:absolute;
+}
+.pxc-color-3 {
+    padding: 2.5rem 0 0;
+}
+
+
+/* Buscador header */
+
+
+
+/* Menu user */
+.pxc-micro-perfil-pic {
+    display:none !important;   
+}
+.pxc-yo-link {
+    
+}
+
+/* Main content */
+#pxc-main-content {
+    background: rgb(221,221,221);
+    background: linear-gradient(180deg, rgba(221,221,221,1) 0%, rgba(238,238,238,1) 57%);
+    padding-bottom: 15rem;
+}
+.page-tagging #pxc-main-content, .page-node-type-foam #pxc-main-content:not(.pxc-edit-form-foam) {
+    background:none #ffffff !important;
+}
+
+
+/* Lateral */
+#pxc-lateral {
+    background-color:#f8f8f8;
+}
+
+
+/* Precontenido */
+.page-frontpage #pxc-pre-content {
+    background-color:#f8f8f8;
+}
+
+
+
+
+/* Footer and copyright */
+.pxc-footer, .pxc-copyright {
+    display:none;
+    background-color:rgba(238,238,238,1);
+}
+
+
+
+
+
+
+
+
+
+
+/* RESPONSIVE */
+/* --------------------------------------------------------------- */
+/* Large devices (Tablet wide to middle screen desktop) */
+@media (min-width: 1024px) and (max-width: 1344px) {
+    
+}
+
+/* Medium devices (tablets) */
+@media (min-width: 991px) and (max-width: 1023px) {
+    
+}
+
+/* Small devices por modificación especial de menu */
+/* El menú se reubica a partir de este breakpoint */
+@media (max-width: 990px) {
+    /* layout del header */
+    .pxc-color-1 {order:1; width:50%;}
+    .pxc-color-2 {order:2; width:50%;}
+    .pxc-color-3 {order:3; width:100%;}
+    
+    /* Footer phantom */
+    .pxc-copyright {
+        display:block;
+        height:250px;
+    }
+}
+
+
+
+
+
+
+
+
+
+/* MOTION */
+/* ------------------------------------------------------------ */
+@keyframes toOpaque {
+ from {opacity: 0;}
+ to {opacity: 1;}
+}
+
+
+
+
+
+
+
+
+
+
+
+

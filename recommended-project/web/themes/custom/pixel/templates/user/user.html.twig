@@ -1,0 +1,117 @@
+{#
+/**
+ * @file
+ * Default theme implementation to present all user data.
+ *
+ * This template is used when viewing a registered user's page,
+ * e.g., example.com/user/123. 123 being the user's ID.
+ *
+ * Available variables:
+ * - content: A list of content items. Use 'content' to print all content, or
+ *   print a subset such as 'content.field_example'. Fields attached to a user
+ *   such as 'user_picture' are available as 'content.user_picture'.
+ * - attributes: HTML attributes for the container element.
+ * - user: A Drupal User entity.
+ *
+ * @see template_preprocess_user()
+ *
+ * @ingroup themeable
+ */
+#}
+
+{% set plantilla = 0 %}
+{% if get.uimessages is defined and get.uimessages is not empty%} 
+    {% if get.uimessages == "1" %}
+        <!-- UI De comentarios -->
+        {% set plantilla = 1 %}
+    {% else %}
+        {% set plantilla = 0 %}
+    {% endif %}
+{% else %}
+    {% set plantilla = 0 %}
+{% endif %}
+
+
+{% set comentariosUser = node.field_mensajes_directos.comment_count %}
+
+{% if plantilla == "0" %}
+    <article{{ attributes }}>
+      {% if content %}
+        <div class="container-xxl">
+            <div class="row align-items-end">
+                <div class="col-md-6">
+                    <div class="pxc-perfil-nombre">{{ content.field_nombres }} {{ content.field_apellidos }}</div>
+                </div>
+                <div class="col-md-6 text-right">
+                    <div class="pxc-perfil-miembro">{{ content.member_for }}</div>
+                </div>
+            </div>       
+            <div class="pxc-contenedor-blanco pxc-contenedor-blanco-user">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="pxc-perfil-picture">{{ content.user_picture }}</div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="pxc-perfil-seguir pxc-perfil-seguir-boton" data-user-id="{{ user.uid.value }}">
+                            <span class="pxc-perfil-seguir-icono">+</span>
+                            <span class="pxc-perfil-seguir-texto">Seguir</span>
+                        </div>
+                        <div class="pxc-perfil-mensaje"><a id="pxc-button-user-mensaje" href="#themeModal-comentarios" data-bs-toggle="modal" data-bs-target="#themeModal-comentarios">Mensajes directos</a></div>
+                        <div class="pxc-perfil-dependencia">{{ content.field_dependencia }}</div>
+                        <div class="pxc-perfil-mail-publicado"></div>
+                        <div class="pxc-perfil-texto">{{ content.field_perfil }}
+                         {% if drupal_token('current-user:uid') == user.uid.value %}
+                            <p class="pxc-s-layer"><a href="/user/{{ drupal_token('current-user:uid') }}/edit">Editar</a></p>
+                        {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center g-5">
+                    <div class="col-md-3 pxc-perfil-indicador pxc-perfil-indicador-1"><div><span class="pxc-perfil-indicador-icono pxc-perfil-indicador-icono-1"></span><span class="pxc-perfil-indicador-icono pxc-perfil-indicador-texto-1">{{ content.field_seguidores['#items']|length }}</span><span class="pxc-perfil-indicador-icono pxc-perfil-indicador-subtexto-1">{% if content.field_seguidores['#items']|length == 1 %}Seguidor{% else %}Seguidores{% endif %}</span></div></div>
+                    <div class="col-md-3 pxc-perfil-indicador pxc-perfil-indicador-2"><a href="#themeModal1" data-bs-toggle="modal" data-bs-target="#themeModal1" id="pxc-ver-contenidos-full"><div><span class="pxc-perfil-indicador-icono pxc-perfil-indicador-icono-2"></span><span class="pxc-perfil-indicador-icono pxc-perfil-indicador-texto-2">1</span><span class="pxc-perfil-indicador-icono pxc-perfil-indicador-subtexto-2">Publicaciones</span><span class="pxc-perfil-indicador-link-2">Ver</span></div></a></div>
+                    <div class="col-md-3 pxc-perfil-indicador pxc-perfil-indicador-3"><a href="#themeModal1" data-bs-toggle="modal" data-bs-target="#themeModal1" id="pxc-ver-contenidos-draft"><div><span class="pxc-perfil-indicador-icono pxc-perfil-indicador-icono-3"></span><span class="pxc-perfil-indicador-icono pxc-perfil-indicador-texto-3">1</span><span class="pxc-perfil-indicador-icono pxc-perfil-indicador-subtexto-3">Borradores</span><span class="pxc-perfil-indicador-link-3">Ver</span></div></a></div>
+                    <div class="col-md-3 pxc-perfil-indicador pxc-perfil-indicador-4"><div><span class="pxc-perfil-indicador-icono pxc-perfil-indicador-icono-4"></span><span class="pxc-perfil-indicador-icono pxc-perfil-indicador-texto-4">1</span><span class="pxc-perfil-indicador-icono pxc-perfil-indicador-subtexto-4">Comentarios</span></div></div>
+                </div>
+            </div>
+        </div>
+        {#- content -#}
+      {% endif %}
+    </article>
+{% endif %}
+
+
+{% if plantilla == "1" %}
+    {% if drupal_token('current-user:uid') == user.uid.value %}
+        {% set specialClass = "pxc-same-owner" %}
+    {% else %}
+        {% set specialClass = "" %}
+    {% endif %}
+    <article{{ attributes }}>
+      {% if content %}
+      <div class="container-xxl">
+          <div class="row">
+              <div class="col-4">
+                <div class="pxc-perfil-picture">{{ content.user_picture }}</div>
+                <div class="pxc-perfil-nombre">{{ content.field_nombres }} {{ content.field_apellidos }}</div>
+                <div class="pxc-perfil-dependencia">{{ content.field_dependencia }}</div>
+                <div class="pxc-perfil-mail-publicado"></div>
+                <div class="pxc-perfil-texto">{{ content.field_perfil }}</div>
+              </div>
+              <div class="col-8">
+                  <div class="pxc-perfil-mensaje {{ specialClass }}">
+                        <div class="pxc-foam-extras-comentarios-yo">
+                            <div class="row">
+                                <div class="col-auto" id="pxc-yo"></div>
+                                <div class="col">
+                                    <span class="pxc-name-autor-yo">Yo</span>
+                                </div>
+                            </div>
+                        </div>
+                      {{ content.group_mensajes_directos }}
+                  </div>
+              </div>
+          </div>
+        </div>  
+      {% endif %}
+    </article>
+{% endif %}    

@@ -1,0 +1,5 @@
+azure_mailer.config:
+  title: 'Azure Communication Services Mailer'
+  route_name: azure_mailer.config
+  description: 'Configure Swift Mailer transport and message settings.'
+  parent: system.admin_config_system

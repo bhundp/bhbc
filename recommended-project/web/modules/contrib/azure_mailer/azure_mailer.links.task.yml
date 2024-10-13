@@ -1,0 +1,4 @@
+azure_mailer.config:
+  route_name: azure_mailer.config
+  title: Azure Communication Services Mailer Settings
+  base_route: azure_mailer.config

@@ -1,0 +1,98 @@
+pxc_simple_form.simple_form:
+  path: 'simple-form'
+  defaults:
+    _form: '\Drupal\pxc_simple_form\Form\SimpleForm'
+    _title: 'Form 1'
+  requirements:
+    _permission: 'access content'
+pxc_simple_form.simple_ajax_form:
+  path: 'simple-ajax-form'
+  defaults:
+    _form: '\Drupal\pxc_simple_form\Form\SimpleAjaxForm'
+    _title: 'Form 2 with Ajax'
+  requirements:
+    _permission: 'access content'
+pxc_simple_form_tagging_content.simple_form_tagging_content:
+  path: 'simple-form-tagging-content'
+  defaults:
+    _form: '\Drupal\pxc_simple_form\Form\SimpleFormTaggingContent'
+    _title: 'Form Tagging Content'
+  requirements:
+    _permission: 'access content'
+pxc_simple_form_tagging_people.simple_form_tagging_people:
+  path: 'simple-form-tagging-people'
+  defaults:
+    _form: '\Drupal\pxc_simple_form\Form\SimpleFormTaggingPeople'
+    _title: 'Form Tagging People'
+  requirements:
+    _permission: 'access content'
+pxc_simple_form_follow_content.simple_form_follow_content:
+  path: 'simple-form-follow-content'
+  defaults:
+    _form: '\Drupal\pxc_simple_form\Form\SimpleFormFollowContent'
+    _title: 'Form Follow Content'
+  requirements:
+    _permission: 'access content'
+pxc_simple_form_follow_people.simple_form_follow_people:
+  path: 'simple-form-follow-people'
+  defaults:
+    _form: '\Drupal\pxc_simple_form\Form\SimpleFormFollowPeople'
+    _title: 'Form Follow People'
+  requirements:
+    _permission: 'access content'
+pxc_simple_form_apply_benefit.simple_form_apply_benefit:
+  path: 'simple-form-apply-benefit'
+  defaults:
+    _form: '\Drupal\pxc_simple_form\Form\SimpleFormApplyBenefit'
+    _title: 'Form Apply Benefit'
+  requirements:
+    _permission: 'access content'  
+pxc_simple_form_suscribe_push.simple_form_suscribe_push:
+  path: 'simple-form-suscribe-push'
+  defaults:
+    _form: '\Drupal\pxc_simple_form\Form\SimpleFormSuscribePush'
+    _title: 'Form Suscribe Push'
+  requirements:
+    _permission: 'access content'      
+pxc_simple_form.taxonomy-listar:
+  path: '/pxc-simple-taxonomy-listar'
+  defaults:
+    _controller: '\Drupal\pxc_simple_form\Controller\Taxonomy::listar'
+    _title: 'Taxonomy lista'
+  requirements:
+    _permission: 'access content'
+pxc_simple_form.taxonomy-relacionar:
+  path: '/pxc-simple-taxonomy-relacionar'
+  defaults:
+    _controller: '\Drupal\pxc_simple_form\Controller\Taxonomy::relacionar'
+    _title: 'Taxonomy relaciones'
+  requirements:
+    _permission: 'access content'    
+pxc_simple_form.facet-service:
+  path: '/pxc-simple-facet-service'
+  defaults:
+    _controller: '\Drupal\pxc_simple_form\Controller\Facet::consumirServicio'
+    _title: 'Facet Service'
+  requirements:
+    _permission: 'access content'
+pxc_simple_form.auto-autores-service:
+  path: '/pxc-simple-auto-autores-service'
+  defaults:
+    _controller: '\Drupal\pxc_simple_form\Controller\Facet::autocompletarAutores'
+    _title: 'Autocompletar autores'
+  requirements:
+    _permission: 'access content'  
+pxc_simple_form.auto-temas-service:
+  path: '/pxc-simple-auto-temas-service'
+  defaults:
+    _controller: '\Drupal\pxc_simple_form\Controller\Facet::autocompletarTemas'
+    _title: 'Autocompletar temas'
+  requirements:
+    _permission: 'access content'  
+pxc_simple_form_save_media.simple_form_save_media:
+  path: 'simple-form-save-media'
+  defaults:
+    _form: '\Drupal\pxc_simple_form\Form\SimpleFormSaveMedia'
+    _title: 'Form Save Media'
+  requirements:
+    _permission: 'access content'      

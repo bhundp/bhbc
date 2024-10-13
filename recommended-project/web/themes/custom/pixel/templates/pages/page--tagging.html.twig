@@ -1,0 +1,23 @@
+{{ attach_library('pixel/pxc-tagging') }}     
+    <!-- Cuerpo --> 
+    {% if page.content %}
+        <section id="pxc-main-content">
+        	 <div id="pxc-main" class="container-xxl">
+        	     <div class="row">
+        	         <div class="col-4">
+        	            {{ page.content }}
+        	        </div>
+        	        <div class="col-8">
+                    {% if page.fila_2 %}
+                    	<div id="pxc-fila2">
+                    		{{ page.fila_2 }}
+                    	</div>
+                	{% endif %}        	            
+        	        </div>
+        	 </div>
+        </section>	 
+    {% endif %}
+
+
+
+

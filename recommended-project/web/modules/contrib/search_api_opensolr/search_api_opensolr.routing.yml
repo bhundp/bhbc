@@ -1,0 +1,29 @@
+search_api_opensolr.opensolr_config_form:
+  path: '/admin/config/search/search-api/opensolr'
+  defaults:
+    _form: '\Drupal\search_api_opensolr\Form\OpenSolrConfigForm'
+    _title: 'OpenSolrConfigForm'
+  requirements:
+    _permission: 'administer search_api_opensolr'
+search_api_opensolr.opensolr_config_zip_import:
+  path: '/admin/config/search/search-api/opensolr-zip-import/{search_api_server}'
+  defaults:
+    _form: '\Drupal\search_api_opensolr\Form\OpenSolrConfigZipImport'
+    _title: 'Import Config Zip'
+  requirements:
+    _entity_access: 'search_api_server.edit'
+  options:
+    parameters:
+      search_api_server:
+        type: entity:search_api_server
+search_api_opensolr.opensolr_config_files_import:
+  path: '/admin/config/search/search-api/opensolr-files-import/{search_api_server}'
+  defaults:
+    _form: '\Drupal\search_api_opensolr\Form\OpenSolrConfigFilesImport'
+    _title: 'Import Config Files'
+  requirements:
+    _entity_access: 'search_api_server.edit'
+  options:
+    parameters:
+      search_api_server:
+        type: entity:search_api_server

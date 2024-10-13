@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the search_api_opensolr module.
+ */
+
+/**
+ * Enable the key module for existing installations.
+ */
+function search_api_opensolr_update_8001(&$sandbox) {
+  // Add update to enable the key module for existing installations.
+  \Drupal::service('module_installer')->install(['key']);
+}

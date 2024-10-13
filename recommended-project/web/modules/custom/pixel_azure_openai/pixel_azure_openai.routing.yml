@@ -1,0 +1,7 @@
+pixel_azure_openai.admin_settings:
+  path: '/admin/config/services/pixel_azure_openai'
+  defaults:
+    _form: '\Drupal\pixel_azure_openai\Form\ModuleConfigurationForm'
+    _title: 'Azure OpenAI authentication'
+  requirements:
+    _permission: 'administer site configuration'

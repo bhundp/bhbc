@@ -1,0 +1,9 @@
+services:
+  pixel_azure_openai.azure_api:
+    class: Drupal\pixel_azure_openai\AzureOpenAi
+    arguments: [
+      '@config.factory',
+      '@http_client',
+      '@logger.factory',
+      '@string_translation'
+    ]

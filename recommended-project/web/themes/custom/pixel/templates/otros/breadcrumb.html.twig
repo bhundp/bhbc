@@ -1,0 +1,39 @@
+{#
+/**
+ * @file
+ * Default theme implementation for a breadcrumb trail.
+ *
+ * Available variables:
+ * - breadcrumb: Breadcrumb trail items.
+ *
+ * @ingroup themeable
+ */
+#}
+{% if breadcrumb %}
+<div class="container-xxl">
+    <div class="pxc-breadcrumbs">
+      <nav class="breadcrumb" role="navigation" aria-labelledby="system-breadcrumb">
+        <h2 id="system-breadcrumb" class="visually-hidden">{{ 'Breadcrumb'|t }}</h2>
+        <ol>
+        {% for item in breadcrumb %}
+          <li>
+            {% if item.url %}
+              {% if loop.last %}
+                <strong class="pxc-last-bread">{{ item.text }}</strong>
+              {% else %}
+                {{ item.text }}
+              {% endif %}
+            {% else %}
+              {% if loop.last %}
+                <strong class="pxc-last-bread">{{ item.text }}</strong>
+              {% else %}
+                {{ item.text }}
+              {% endif %}
+            {% endif %}
+          </li>
+        {% endfor %}
+        </ol>
+      </nav>
+    </div>
+</div>
+{% endif %}

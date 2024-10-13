@@ -1,0 +1,61 @@
+pixel-js:
+  version: 1.0.x
+  js:
+      js/bootstrap/bootstrap.bundle.min.js: {}
+      js/slick/slick.js: {
+        attributes: { 
+          defer: true,
+        } 
+      }
+      js/dompurify/purify.min.js: {}
+      js/main.js: {}
+  dependencies:
+    - core/jquery
+pxc-content-management: 
+  version: 1.0.x
+  css: 
+    theme: 
+      css/pxc-content/pxc-content-main.css: {} 
+  js: 
+    js/pxc-content/pxc-content-main.js: {} 
+pxc-tagging:
+  version: 1.0.x
+  js: 
+    js/pxc-tagging/pxc-tagging.js: {} 
+pxc-tagging-edit:
+  version: 1.0.x
+  js: 
+    js/pxc-tagging/pxc-tagging-edit.js: {}     
+pxc-graph:
+  version: 1.0.x
+  js: 
+    https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js: {}     
+pxc-tagging-people:
+  version: 1.0.x
+  js: 
+    js/pxc-tagging/pxc-tagging-people.js: {} 
+pxc-map-relationships:
+  version: 1.0.x
+  js: 
+    js/pxc-map-relationships/vis-network.min.js: {} 
+    js/pxc-map-relationships/pxc-map-relationships.js: {}     
+pxc-comments:
+  version: 1.0.x
+  js: 
+    js/pxc-comments/pxc-comments.js: {} 
+global-styling:
+  version: 1.x
+  css:
+    theme:
+      css/bootstrap/bootstrap.css: {}
+      css/slick/slick.css: {}
+      css/slick/slick-theme.css: {}
+      css/main.css: {}
+      css/pixel.css: {}
+      css/componentes.css: {} 
+      css/decoracion.css: {}       
+over-styling:
+  version: 1.x
+  css:
+    theme:
+      css/over.css: {}      

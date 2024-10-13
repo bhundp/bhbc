@@ -1,0 +1,10 @@
+plugin.plugin_configuration.search_api_solr_connector.searchstax:
+  type: plugin.plugin_configuration.search_api_solr_connector.standard
+  label: 'SearchStax connector settings'
+  mapping:
+    update_endpoint:
+      type: string
+      label: 'Update endpoint'
+    token:
+      type: string
+      label: 'Update endpoint authorization token'

@@ -1,0 +1,19 @@
+{
+    "name": "drupal/search_api_searchstax",
+    "type": "drupal-module",
+    "description": "Provides integration between your Drupal site and the SearchStax Solr service.",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Markus Kalkbrenner",
+            "homepage": "https://www.drupal.org/u/mkalkbrenner"
+        }
+    ],
+    "require": {
+        "drupal/search_api_solr": "^4.2",
+        "solarium/solarium": "^6.2.7"
+    },
+    "conflict": {
+        "drupal/search_api_solr_nlp": "*"
+    }
+}

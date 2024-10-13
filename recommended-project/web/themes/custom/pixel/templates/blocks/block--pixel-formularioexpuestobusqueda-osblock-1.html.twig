@@ -1,0 +1,200 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a block.
+ *
+ * Available variables:
+ * - plugin_id: The ID of the block implementation.
+ * - label: The configured label of the block if visible.
+ * - configuration: A list of the block's configuration values.
+ *   - label: The configured label for the block.
+ *   - label_display: The display settings for the label.
+ *   - provider: The module or other provider that provided this block plugin.
+ *   - Block plugin specific settings will also be stored here.
+ * - in_preview: Whether the plugin is being rendered in preview mode.
+ * - content: The content of this block.
+ * - attributes: array of HTML attributes populated by modules, intended to
+ *   be added to the main container tag of this template.
+ *   - id: A valid HTML ID and guaranteed unique.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ *
+ * @see template_preprocess_block()
+ *
+ * @ingroup themeable
+ */
+#}
+{# url('<current>')|render|render #}
+{# get.status #}
+{% set curPath = url('<current>')|render|render %}
+<div{{ attributes }}>
+    <div class="container">
+        <div class="row pxc-buscador-os-fila-1">
+            <div class="pxc-buscador-os pxc-buscador-os-col-1 col-md-8">
+                {% block content %}
+                    {{ content }}
+                {% endblock %}
+            </div>
+            <div class="pxc-buscador-os pxc-buscador-os-col-2 col-md-2">
+                <div id="pxc-buscador-os-filtrar" class="pxc-buscador-os-wrapper pxc-buscador-os-filtrar-wrapper">
+                    <div id="pxc-buscador-os-filtrar-button" class="pxc-buscador-os-wrapper-boton"><span id="pxc-badge-f" class="pxc-badge oculto"><img src="/themes/custom/pixel/img/chulo.png" alt="Icono de ok" /></span><span>Filtrar</span>
+                        <div id="pxc-buscador-os-filtrar-panel" class="pxc-buscador-os-panel-wrapper pxc-buscador-os-filtrar-panel-wrapper">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span class="pxc-buscador-os-panel-titulo">Filtrar por</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span class="pxc-buscador-os-panel-subtitulo">Tipo</span>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="pxc-buscador-os-tipo-publicaciones" name="buscador-os-tipo-publicaciones" />
+                                            <label class="form-check-label" for="pxc-buscador-os-tipo-publicaciones">Publicaciones oficiales PNUD</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="pxc-buscador-os-tipo-contenido" name="buscador-os-tipo-contenido" />
+                                            <label class="form-check-label" for="pxc-buscador-os-tipo-contenido">Contenido de usuarios</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="pxc-buscador-os-tipo-video" name="buscador-os-tipo-video" />
+                                            <label class="form-check-label" for="pxc-buscador-os-tipo-video">Video</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="pxc-buscador-os-tipo-audio" name="buscador-os-tipo-audio" />
+                                            <label class="form-check-label" for="pxc-buscador-os-tipo-audio">Audio</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="pxc-buscador-os-tipo-imagenes" name="buscador-os-tipo-imagenes" />
+                                            <label class="form-check-label" for="pxc-buscador-os-tipo-imagenes">Im&aacute;genes</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <span class="pxc-buscador-os-panel-subtitulo" for="pxc-buscador-os-temas">Temas</span>
+                                        <div class="pxc-buscador-os-autocomplete-wrapper">
+                                            <input class="form-control" type="text" placeholder="Ej. paz" id="pxc-buscador-os-temas" autocomplete="off">
+                                            <div id="pxc-buscador-os-temas-autocomplete-panel" class="pxc-buscador-os-autocomplete-panel">
+                                                Start typing
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <span class="pxc-buscador-os-panel-subtitulo" for="pxc-buscador-os-autor">Autor</span>
+                                        <div class="pxc-buscador-os-autocomplete-wrapper">
+                                            <input class="form-control" type="text" placeholder="Ej. John Doe" id="pxc-buscador-os-autor" autocomplete="off">
+                                            <div id="pxc-buscador-os-autor-autocomplete-panel" class="pxc-buscador-os-autocomplete-panel">
+                                                Start typing
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span class="pxc-buscador-os-panel-subtitulo">Fecha de publicaci&oacute;n</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-check-label" for="pxc-buscador-os-fecha-desde">Desde</label>
+                                        <input class="form-control" type="date" placeholder="Desde" id="pxc-buscador-os-fecha-desde">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-check-label" for="pxc-buscador-os-fecha-hasta">Hasta</label>
+                                        <input class="form-control" type="date" placeholder="Hasta" id="pxc-buscador-os-fecha-hasta">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="pxc-buscador-os-ver-borradores" name="VerBorradores" />
+                                            <label class="form-check-label" for="pxc-buscador-os-ver-borradores">Ver solo borradores</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>    
+            <div class="pxc-buscador-os pxc-buscador-os-col-3 col-md-2">
+                <div id="pxc-buscador-os-ordenar" class="pxc-buscador-os-wrapper pxc-buscador-os-ordenar-wrapper">
+                    <div id="pxc-buscador-os-ordenar-button" class="pxc-buscador-os-wrapper-boton"><span id="pxc-badge-o" class="pxc-badge oculto"><img src="/themes/custom/pixel/img/chulo.png" alt="Icono de ok" /></span><span>Ordenar</span>
+                        <div id="pxc-buscador-os-ordenar-panel" class="pxc-buscador-os-panel-wrapper pxc-buscador-os-ordenar-panel-wrapper">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span class="pxc-buscador-os-panel-titulo">Ordenar por</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="pxc-buscador-os-orden-1" name="pxc-buscador-os-orden-1" />
+                                            <label class="form-check-label" for="pxc-buscador-os-orden-1">Los m&aacute;s recientes primero</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="pxc-buscador-os-orden-2" name="pxc-buscador-os-orden-2" />
+                                            <label class="form-check-label" for="pxc-buscador-os-orden-2">Los m&aacute;s antiguos primero</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="pxc-buscador-os-orden-3" name="pxc-buscador-os-orden-3" />
+                                            <label class="form-check-label" for="pxc-buscador-os-orden-3">Los m&aacute;s vistos</label>
+                                        </div>
+                                    </div>                                
+                                </div>    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {# Si no se est¨¢ en b¨²squeda OS, se oculte el panel de temas y/o a¨²n adentro se oculte si no hay parametros GET aportados #}
+        {% if 'busqueda-os' in curPath and get.status|length > 0 %}
+            <div class="row pxc-buscador-os-fila-2">
+                <div class="pxc-buscador-os pxc-buscador-os-col-4 col-md-12">
+                    <ul class="nav nav-tabs" id="pxc-tabBuscadorOs" role="tablist">
+                      <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="pxc-temas-tab" data-bs-toggle="tab" data-bs-target="#pxc-temas" type="button" role="tab" aria-controls="pxc-temas" aria-selected="true">Temas relacionados</button>
+                      </li>
+                      <li id="pxc-buscador-os-fila-2-bolitas" class="nav-item" role="presentation" data-pxc-tids="" data-pxc-nids="" data-pxc-sizes="">
+                        <button class="nav-link" id="pxc-relaciones-tab" data-bs-toggle="tab" data-bs-target="#pxc-relaciones" type="button" role="tab" aria-controls="pxc-relaciones" aria-selected="false">Ver relaciones</button>
+                      </li>
+                    </ul>
+                    <div class="tab-content" id="tabBuscadorOsContent">
+                      <div class="tab-pane fade show active" id="pxc-temas" role="tabpanel" aria-labelledby="pxc-temas-tab">
+                          <ul id="pxc-buscador-os-pastillas" class="pxc-buscador-os-pastillas-lista">
+                          </ul>
+                      </div>
+                      <div class="tab-pane fade" id="pxc-relaciones" role="tabpanel" aria-labelledby="pxc-relaciones-tab"><div id="pxc-bolitas"></div><div id="pxc-bolitas-aviso"></div></div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        <div class="row pxc-buscador-os-fila-pre-3 justify-content-end">
+            <a id="pxc-activar-os-col-5" class="pxc-buscador-os col-4" data-bs-toggle="collapse" href="#collapseOs5" role="button" aria-expanded="false" aria-controls="collapseOs5">
+                Filtrar
+            </a>
+            <a id="pxc-activar-os-col-6" class="pxc-buscador-os col-4" data-bs-toggle="collapse" href="#collapseOs6" role="button" aria-expanded="false" aria-controls="collapseOs6">
+                Ordenar
+            </a>
+        </div>
+        <div class="row pxc-buscador-os-fila-3">
+            <div class="collapse" id="collapseOs5">
+                <div class="pxc-buscador-os pxc-buscador-os-col-5 col-12">
+                </div>
+            </div>
+            <div class="collapse" id="collapseOs6">
+                <div class="pxc-buscador-os pxc-buscador-os-col-6 col-12">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

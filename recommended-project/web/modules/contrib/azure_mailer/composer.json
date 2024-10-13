@@ -1,0 +1,24 @@
+{
+    "name": "drupal/azure_mailer",
+    "description": "Azure Communications Service mailer module for Drupal",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Steven Linn (stevenlafl)",
+            "homepage": "https://www.drupal.org/u/stevenlafl",
+            "role": "Maintainer"
+        }
+    ],
+    "homepage": "https://drupal.org/project/azure_mailer",
+    "support": {
+        "issues": "https://drupal.org/project/issues/azure_mailer",
+        "source": "https://git.drupalcode.org/project/azure_mailer"
+    },
+    "require": {
+        "drupal/core": "^10 || ^11",
+        "php": ">=8.1.0",
+        "mobomo/guzzle-azure-hmac-auth": "dev-main",
+        "drupal/mailsystem": "^4.1.0"
+    }
+}

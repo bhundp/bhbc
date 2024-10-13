@@ -1,0 +1,1899 @@
+@charset "UTF-8";
+/* HTML */
+html {
+  overflow-x: hidden;
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+* {
+  text-rendering: optimizeLegibility;
+  /* 
+     -webkit-font-smoothing: antialiased;
+     -moz-osx-font-smoothing: grayscale;
+  */
+  font-family: "m-book";
+}
+
+/* Pixel Theme */
+/*
+Theme: Pixel
+Tipografias
+
+Especifica de cada implementacion.
+*/
+@font-face {
+  font-family: "m-black";
+  src: url("../fonts/Montserrat-Black.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+/*@font-face {
+    font-family: 'm-black-italic';
+    src: url('../fonts/Montserrat-BlackItalic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+	font-display: $font-display;
+}*/
+@font-face {
+  font-family: "m-bold";
+  src: url("../fonts/Montserrat-Bold.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+/*@font-face {
+    font-family: 'm-bold-italic';
+    src: url('../fonts/Montserrat-BoldItalic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+	font-display: $font-display;
+}*/
+@font-face {
+  font-family: "m-semibold";
+  src: url("../fonts/Montserrat-SemiBold.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+/*@font-face {
+    font-family: 'm-semibold-italic';
+    src: url('../fonts/Montserrat-SemiBoldItalic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+	font-display: $font-display;
+}*/
+@font-face {
+  font-family: "m-book";
+  src: url("../fonts/Montserrat-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+/*@font-face {
+    font-family: 'm-book-italic';
+    src: url('../fonts/Montserrat-Italic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+	font-display: $font-display;
+}*/
+@font-face {
+  font-family: "m-medium";
+  src: url("../fonts/Montserrat-Medium.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+/*@font-face {
+    font-family: 'm-medium-italic';
+    src: url('../fonts/Montserrat-MediumItalic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+	font-display: $font-display;
+}*/
+@font-face {
+  font-family: "m-light";
+  src: url("../fonts/Montserrat-Light.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+/*@font-face {
+    font-family: 'm-light-italic';
+    src: url('../fonts/Montserrat-LightItalic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+	font-display: $font-display;
+}*/
+.pxc-light {
+  font-family: m-light;
+}
+
+.pxc-book {
+  font-family: m-book;
+}
+
+.pxc-medium {
+  font-family: m-medium;
+}
+
+.pxc-bold {
+  font-family: m-bold;
+}
+
+.pxc-semibold {
+  font-family: m-semibold;
+}
+
+.pxc-black {
+  font-family: m-black;
+}
+
+.pxc-light-italic {
+  font-family: m-light-italic;
+}
+
+.pxc-book-italic {
+  font-family: m-book-italic;
+}
+
+.pxc-medium-italic {
+  font-family: m-medium-italic;
+}
+
+.pxc-semibold-italic {
+  font-family: m-semibold-italic;
+}
+
+.pxc-bold-italic {
+  font-family: m-bold-italic;
+}
+
+.pxc-black-italic {
+  font-family: m-black-italic;
+}
+
+/* End Typo */
+/*
+Theme: Pixel
+Elementos generales
+
+Intentar NO modificar en cuanto a sus definiciones y estructuras, pues es genérica del Theme.
+Puede ser modificados los valores.
+*/
+/* PARTE I: VARS */
+/* :::::::::::::::::::::::::::::::::::::::::::::::::::::: */
+/* :::::::::::::::::::::::::::::::::::::::::::::::::::::: */
+/* :::::::::::::::::::::::::::::::::::::::::::::::::::::: */
+/* I0. Basics */
+/* Se usa para definir las escalas de separación */
+/* I1. Colors */
+/* :::::::::::::::::::::::::::::::::::::::::::::::::::::: */
+/* Foregrounds */
+/* Es el color primario de la paleta de color que no sea el que viene por defecto (negro) */
+/* Es el color secundario de la paleta de color, usualmente complementa al primario, por ejemplo para CTAS */
+/* Es el color terciario de la paleta de color, usualmente complementa a los dos anteriores */
+/* Es un color opcional */
+/* Es un color opcional */
+/* Backgrounds */
+/* Es el color que por defecto tendrán los fondos de los componentes que no sea blanco o el color del fondo general aplicado a Body */
+/* Segundo color de fondos de la paleta de color, puede ser para destacar componentes que no tengan el color de fondo primario o para hacer contraste a este último. */
+/* Tercer color de fondos de la paleta de color, puede ser para destacar componentes que no tengan el color de fondo primario o para hacer contraste a este último. */
+/* Links */
+/* Es el color que tendrán los enlaces por defecto, puede ser el mismo color primario o uno independiente */
+/* Es el color que tendrán los enlaces por defecto con el efecto hover */
+/* Es el color que tendrán los enlaces por defecto con el efecto activo, puede ser el color secundario o uno independiente */
+/* Es el color que tendrán los enlaces por defecto con el efecto hover */
+/* Enlaces de menú */
+/* Es el color que tendrán los enlaces por defecto de los menus, puede ser el mismo color primario o uno independiente */
+/* Es el color que tendrán los enlaces de menu por defecto con el efecto hover */
+/* Es el color que tendrán los enlaces de menu por defecto con el efecto activo, puede ser el color secundario o uno independiente */
+/* Es el color que tendrán los enlaces de menu por defecto con el efecto hover */
+/* Color de fondo del ítem de menú */
+/* Color de fondo del ítem de menú para un estado secundario, por ejemplo activo */
+/* Color de fondo del ítem de menú para un estado secundario, por ejemplo hover */
+/* I2. Estilos */
+/* :::::::::::::::::::::::::::::::::::::::::::::::::::::: */
+/* I2.1 Estilos menú */
+/* Ítems de menús grandes */
+/* Items de menú pequeños */
+/* Items de menú pequeños Responsive */
+/* Estilos layout */
+/* Estilos de separaciones estándar de elementos */
+/* Separaciones estándar de elementos para solo un cuadrante */
+/* I2.2 Estilos de fuentes adicionales */
+/* ---------------------------------------------- */
+/* Vienen de los estilos de boostrap, pero se rescriben aquí como variables del theme */
+/* Sombras */
+/* Bordes componentes */
+/* PARTE II: CLASES */
+/* :::::::::::::::::::::::::::::::::::::::::::::::::::::: */
+/* :::::::::::::::::::::::::::::::::::::::::::::::::::::: */
+/* :::::::::::::::::::::::::::::::::::::::::::::::::::::: */
+/* Definición de clases */
+.pxc-movil {
+  display: none;
+}
+
+.pxc-desktop {
+  display: inherit;
+}
+
+/* Clases de colores */
+.pxc-color-primario {
+  color: #253777;
+}
+
+.pxc-color-secundario {
+  color: #0037c5;
+}
+
+.pxc-fondo-color-primario {
+  background-color: #fbfbfb;
+}
+
+.pxc-fondo-color-secundario {
+  background-color: #fff;
+}
+
+.pxc-color-primario-offset {
+  color: #fbfbfb;
+}
+
+.pxc-color-secundario-offset {
+  color: #fff;
+}
+
+.pxc-fondo-color-primario-offset {
+  background-color: #253777;
+}
+
+.pxc-fondo-color-secundario-offset {
+  background-color: #0037c5;
+}
+
+/* Clases de separación */
+.pxc-separacion-extragrande {
+  padding: 5rem 2.5rem;
+}
+
+.pxc-separacion-grande {
+  padding: 3rem 1.5rem;
+}
+
+.pxc-separacion-media {
+  padding: 2rem 1rem;
+}
+
+.pxc-separacion-pequena {
+  padding: 1.5rem 0.75rem;
+}
+
+.pxc-separacion-extrapequena {
+  padding: 0.75rem 0.35rem;
+}
+
+.pxc-separacion-extragrande-v {
+  padding: 5rem 0;
+}
+
+.pxc-separacion-grande-v {
+  padding: 3rem 0;
+}
+
+.pxc-separacion-media-v {
+  padding: 2rem 0;
+}
+
+.pxc-separacion-pequena-v {
+  padding: 1.5rem 0;
+}
+
+.pxc-separacion-extrapequena-v {
+  padding: 0.75rem 0;
+}
+
+.pxc-separacion-extragrande-b {
+  padding: 0 0 5rem;
+}
+
+.pxc-separacion-grande-b {
+  padding: 0 0 3rem;
+}
+
+.pxc-separacion-media-b {
+  padding: 0 0 2rem;
+}
+
+.pxc-separacion-pequena-b {
+  padding: 0 0 1.5rem;
+}
+
+.pxc-separacion-extrapequena-b {
+  padding: 0 0 0.75rem;
+}
+
+.pxc-separacion-extragrande-t {
+  padding: 5rem 0 0;
+}
+
+.pxc-separacion-grande-t {
+  padding: 3rem 0 0;
+}
+
+.pxc-separacion-media-t {
+  padding: 2rem 0 0;
+}
+
+.pxc-separacion-pequena-t {
+  padding: 1.5rem 0 0;
+}
+
+.pxc-separacion-extrapequena-t {
+  padding: 0.75rem 0 0;
+}
+
+.pxc-separacion-extragrande-u-t {
+  padding-top: 5rem;
+}
+
+.pxc-separacion-grande-u-t {
+  padding-top: 3rem;
+}
+
+.pxc-separacion-media-u-t {
+  padding-top: 2rem;
+}
+
+.pxc-separacion-pequena-u-t {
+  padding-top: 1.5rem;
+}
+
+.pxc-separacion-extrapequena-u-t {
+  padding-top: 0.75rem;
+}
+
+.pxc-separacion-extragrande-u-b {
+  padding-bottom: 5rem;
+}
+
+.pxc-separacion-grande-u-b {
+  padding-bottom: 3rem;
+}
+
+.pxc-separacion-media-u-b {
+  padding-bottom: 2rem;
+}
+
+.pxc-separacion-pequena-u-b {
+  padding-bottom: 1.5rem;
+}
+
+.pxc-separacion-extrapequena-u-b {
+  padding-bottom: 0.75rem;
+}
+
+.pxc-separacion-extragrande-u-l {
+  padding-left: 5rem;
+}
+
+.pxc-separacion-grande-u-l {
+  padding-left: 3rem;
+}
+
+.pxc-separacion-media-u-l {
+  padding-left: 2rem;
+}
+
+.pxc-separacion-pequena-u-l {
+  padding-left: 1.5rem;
+}
+
+.pxc-separacion-extrapequena-u-l {
+  padding-left: 0.75rem;
+}
+
+.pxc-separacion-extragrande-u-r {
+  padding-right: 5rem;
+}
+
+.pxc-separacion-grande-u-r {
+  padding-right: 3rem;
+}
+
+.pxc-separacion-media-u-r {
+  padding-right: 2rem;
+}
+
+.pxc-separacion-pequena-u-r {
+  padding-right: 1.5rem;
+}
+
+.pxc-separacion-extrapequena-u-r {
+  padding-right: 0.75rem;
+}
+
+/* Clases de fuente adicionales  */
+.pxc-fls-separada {
+  letter-spacing: 0.015rem;
+}
+
+.fs-7 {
+  font-size: 0.9rem !important;
+}
+
+.fs-8 {
+  font-size: 0.8rem !important;
+}
+
+.fs-9 {
+  font-size: 0.7rem !important;
+}
+
+/* Clases adicionales */
+.pxc-sombra-primario {
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Clases de fondos */
+.pxc-fondo-no-repite {
+  background-repeat: no-repeat;
+}
+
+.pxc-fondo-cover {
+  background-size: cover;
+}
+
+.pxc-fondo-b-derecha {
+  background-position: bottom right;
+}
+
+.pxc-fondo-b-izquierda {
+  background-position: bottom left;
+}
+
+.pxc-fondo-t-derecha {
+  background-position: top right;
+}
+
+.pxc-fondo-t-izquierda {
+  background-position: top left;
+}
+
+/* Clases de columnas sin padding u otros elementos */
+.pxc-columnas-sin-padding > .pxc-columna-sin-padding {
+  padding: 0 !important;
+}
+
+.pxc-columna-sin-padding figure, .pxc-columna-sin-padding img {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Responsive variations */
+/* :::::::::::::::::::::::::::::::::::::::::::::::::::::: */
+/* General por small devices */
+@media (max-width: 1344px) {
+  /* Reset estilos de separacion */
+  .pxc-separacion-reset-t {
+    padding-top: 0 !important;
+  }
+  .pxc-separacion-reset-r {
+    padding-right: 0 !important;
+  }
+  .pxc-separacion-reset-l {
+    padding-left: 0 !important;
+  }
+  .pxc-separacion-reset-b {
+    padding-bottom: 0 !important;
+  }
+}
+/* Large devices (Tablet wide to middle screen desktop) */
+@media (min-width: 1024px) and (max-width: 1344px) {
+  /* Reset estilos de separacion */
+  .pxc-separacion-md-reset-t {
+    padding-top: 0 !important;
+  }
+  .pxc-separacion-md-reset-r {
+    padding-right: 0 !important;
+  }
+  .pxc-separacion-md-reset-l {
+    padding-left: 0 !important;
+  }
+  .pxc-separacion-md-reset-b {
+    padding-bottom: 0 !important;
+  }
+  /* Manejo de fondos */
+  .pxc-fondo-md-sinfondo {
+    background-image: none !important;
+  }
+  .pxc-fondo-md-50 {
+    background-size: 50%;
+  }
+  .pxc-fondo-md-40 {
+    background-size: 40%;
+  }
+  .pxc-fondo-md-30 {
+    background-size: 30%;
+  }
+  .pxc-fondo-md-20 {
+    background-size: 20%;
+  }
+  .pxc-fondo-md-10 {
+    background-size: 10%;
+  }
+}
+/* Separaciones estándar de elementos */
+/* Separaciones estándar de elementos para solo un cuadrante */
+/* General por small devices */
+@media (max-width: 1200px) {
+  /* Clases de separación */
+  .pxc-separacion-extragrande {
+    padding: 2.5rem 1.25rem;
+  }
+  .pxc-separacion-grande {
+    padding: 1.5rem 0.75rem;
+  }
+  .pxc-separacion-media {
+    padding: 1rem 0.5rem;
+  }
+  .pxc-separacion-extragrande-v {
+    padding: 2.5rem 0;
+  }
+  .pxc-separacion-grande-v {
+    padding: 1.5rem 0;
+  }
+  .pxc-separacion-media-v {
+    padding: 1rem 0;
+  }
+  .pxc-separacion-extragrande-b {
+    padding: 0 0 2.5rem;
+  }
+  .pxc-separacion-grande-b {
+    padding: 0 0 1.5rem;
+  }
+  .pxc-separacion-media-b {
+    padding: 0 0 1rem;
+  }
+  .pxc-separacion-extragrande-t {
+    padding: 2.5rem 0 0;
+  }
+  .pxc-separacion-grande-t {
+    padding: 1.5rem 0 0;
+  }
+  .pxc-separacion-media-t {
+    padding: 1rem 0 0;
+  }
+  .pxc-separacion-extragrande-u-t {
+    padding-top: 2.5rem;
+  }
+  .pxc-separacion-grande-u-t {
+    padding-top: 1.5rem;
+  }
+  .pxc-separacion-media-u-t {
+    padding-top: 1rem;
+  }
+  .pxc-separacion-extragrande-u-b {
+    padding-bottom: 2.5rem;
+  }
+  .pxc-separacion-grande-u-b {
+    padding-bottom: 1.5rem;
+  }
+  .pxc-separacion-media-u-b {
+    padding-bottom: 1rem;
+  }
+  .pxc-separacion-extragrande-u-l {
+    padding-left: 2.5rem;
+  }
+  .pxc-separacion-grande-u-l {
+    padding-left: 1.5rem;
+  }
+  .pxc-separacion-media-u-l {
+    padding-left: 1rem;
+  }
+  .pxc-separacion-extragrande-u-r {
+    padding-right: 2.5rem;
+  }
+  .pxc-separacion-grande-u-r {
+    padding-right: 1.5rem;
+  }
+  .pxc-separacion-media-u-r {
+    padding-right: 1rem;
+  }
+}
+/* Medium devices (tablets) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Reset estilos de separacion */
+  .pxc-separacion-sm-reset-t {
+    padding-top: 0 !important;
+  }
+  .pxc-separacion-sm-reset-r {
+    padding-right: 0 !important;
+  }
+  .pxc-separacion-sm-reset-l {
+    padding-left: 0 !important;
+  }
+  .pxc-separacion-sm-reset-b {
+    padding-bottom: 0 !important;
+  }
+  /* Manejo de fondos */
+  .pxc-fondo-sm-sinfondo {
+    background-image: none !important;
+  }
+  .pxc-fondo-sm-50 {
+    background-size: 50%;
+  }
+  .pxc-fondo-sm-40 {
+    background-size: 40%;
+  }
+  .pxc-fondo-sm-30 {
+    background-size: 30%;
+  }
+  .pxc-fondo-sm-20 {
+    background-size: 20%;
+  }
+  .pxc-fondo-sm-10 {
+    background-size: 10%;
+  }
+}
+/* Small devices */
+@media (max-width: 768px) {
+  .pxc-movil {
+    display: block;
+  }
+  .pxc-desktop {
+    display: none;
+  }
+  /* Reset estilos de separacion */
+  .pxc-separacion-xs-reset-t {
+    padding-top: 0 !important;
+  }
+  .pxc-separacion-xs-reset-r {
+    padding-right: 0 !important;
+  }
+  .pxc-separacion-xs-reset-l {
+    padding-left: 0 !important;
+  }
+  .pxc-separacion-xs-reset-b {
+    padding-bottom: 0 !important;
+  }
+  /* Manejo de fondos */
+  .pxc-fondo-xs-sinfondo {
+    background-image: none !important;
+  }
+  .pxc-fondo-xs-50 {
+    background-size: 50%;
+  }
+  .pxc-fondo-xs-40 {
+    background-size: 40%;
+  }
+  .pxc-fondo-xs-30 {
+    background-size: 30%;
+  }
+  .pxc-fondo-xs-20 {
+    background-size: 20%;
+  }
+  .pxc-fondo-xs-10 {
+    background-size: 10%;
+  }
+}
+/*
+Theme: Pixel
+Estilos aplicables a la accesibilidad
+
+Intentar NO modificar, pues es genérica del Theme.
+*/
+/* Link general behavoir */
+a:link {
+  color: #253777;
+}
+
+a:hover {
+  color: #333;
+}
+
+a:active {
+  color: #0037c5;
+}
+
+a:visited {
+  color: #2f4797;
+}
+
+a {
+  word-break: break-word;
+}
+
+/*
+Theme: Pixel
+Layout
+
+Intentar NO modificar, pues es genérica del Theme.
+*/
+.pxc-menu-principal-theme-down {
+  text-align: center;
+  background-color: #fff;
+}
+.pxc-menu-principal-theme-down > div {
+  padding: 1rem 0.5rem;
+}
+
+/*
+Theme: Pixel
+Componentes del menu
+
+Intentar NO modificar, pues es genérica del Theme.
+*/
+/* 0 Menu default */
+/* Cualquier lista de menú */
+ul.menu {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+ul.menu li {
+  padding: 0;
+}
+ul.menu li a, ul.menu li span {
+  display: block;
+  padding: 0.35rem 0.75rem;
+}
+
+/* 1. Menu principal */
+/* Lista de ítems */
+.pxc-main-menu-lista {
+  display: block;
+}
+.pxc-main-menu-lista nav > ul {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  justify-content: center;
+}
+.pxc-main-menu-lista nav > ul li {
+  padding: 0;
+  position: relative;
+}
+.pxc-main-menu-lista nav > ul li a, .pxc-main-menu-lista nav > ul li span {
+  display: block;
+  padding: 0.5rem 1rem;
+  color: #253777;
+}
+.pxc-main-menu-lista nav > ul li a:hover, .pxc-main-menu-lista nav > ul li a:active, .pxc-main-menu-lista nav > ul li span:hover, .pxc-main-menu-lista nav > ul li span:active {
+  background-color: #253777;
+  color: #fff;
+}
+.pxc-main-menu-lista nav > ul li ul {
+  display: none;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  position: absolute;
+  background-color: #fbfbfb;
+  border: 1px solid #253777;
+  border-radius: 0;
+  -webkit-box-shadow: 1px 1px 25px -1px rgba(0,0,0,0.25);
+  -moz-box-shadow: 1px 1px 25px -1px rgba(0,0,0,0.25);
+  box-shadow: 1px 1px 25px -1px rgba(0,0,0,0.25);
+  transition: all 0.5s;
+  z-index:6;
+  top: 100px;
+  right: 50px;
+}
+.pxc-main-menu-lista nav > ul li ul:before {
+    content:"";
+    display:block;
+    width:25px;
+    height:25px;
+    border-style:solid;
+    border-width:25px 25px 0 0;
+    border-color: transparent #fff transparent transparent;
+    position:absolute;
+    top:-25px;
+    right:0;
+}
+.pxc-main-menu-lista nav > ul > li > a, .pxc-main-menu-lista nav > ul > li > span {
+  padding: 0;
+}
+.pxc-main-menu-lista nav > ul > li:hover > a, .pxc-main-menu-lista nav > ul > li:hover > span {
+  background-color: #253777;
+  color: #fff;
+}
+.pxc-main-menu-lista nav > ul > li:hover ul {
+  display: block;
+}
+
+.pxc-menu-principal-theme-row-2.pxc-header-small {
+  position: fixed;
+  z-index: 99;
+  background-color: #fbfbfb;
+  width: 100%;
+  left: 0;
+  top: 0;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+.pxc-menu-principal-theme-row-2.pxc-header-small:before {
+  content: url(/themes/custom/pixel/img/micro1.png);
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-top: -11px;
+}
+
+/* 2. Menu lateral */
+.pxc-lateral {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  background-color: #fbfbfb;
+  overflow-x: hidden;
+  transition: 0.1s;
+}
+.pxc-lateral .menu--main {
+  padding-top: 3rem;
+}
+.pxc-lateral .menu--main ul {
+  display: block;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pxc-lateral .menu--main ul li {
+  padding: 0;
+}
+.pxc-lateral .menu--main ul li a, .pxc-lateral .menu--main ul li span {
+  display: block;
+  padding: 0.5rem 1rem;
+  color: #253777;
+}
+.pxc-lateral .menu--main ul li a:hover, .pxc-lateral .menu--main ul li a:active, .pxc-lateral .menu--main ul li span:hover, .pxc-lateral .menu--main ul li span:active {
+  background-color: #253777;
+  color: #fff;
+}
+.pxc-lateral .menu--main ul li a.is-active, .pxc-lateral .menu--main ul li span.is-active {
+  color: #0037c5;
+  font-family: "m-medium";
+  border-bottom: 1px solid #0037c5;
+}
+.pxc-lateral .menu--main > ul > li > a, .pxc-lateral .menu--main > ul > li > span {
+  font-size: 1.25rem !important;
+  font-family: "m-bold";
+  padding-left: 0.75rem;
+}
+.pxc-lateral .menu--main > ul > li > ul > li > a, .pxc-lateral .menu--main > ul > li > ul > li > span {
+  font-size: 0.9rem !important;
+  font-family: "m-medium";
+  padding-left: 0.75rem;
+}
+.pxc-lateral .menu--main > ul > li > ul > li > ul > li a, .pxc-lateral .menu--main > ul > li > ul > li > ul > li span {
+  font-size: 0.7rem !important;
+  padding-left: 1.5rem;
+}
+.pxc-lateral .pxc-fantasma {
+  width: 20% !important;
+  background-color: #fff;
+  opacity: 0.5;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: inherit;
+  display: none;
+}
+
+.pxc-lateral-activo {
+  width: 80% !important;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+.pxc-lateral-activo .pxc-fantasma {
+  display: block;
+}
+
+/* 3. Auxiliares */
+/* 3.1 Boton de cerrar ventana */
+.pxc-lateral-boton {
+  float: right;
+  width: 45px;
+  height: 45px;
+  border: none;
+  background-color: transparent;
+}
+.pxc-lateral-boton .pxc-lateral-boton-icono,
+.pxc-lateral-boton .pxc-lateral-boton-icono::before,
+.pxc-lateral-boton .pxc-lateral-boton-icono::after {
+  display: block;
+  background-color: #253777;
+  position: absolute;
+  height: 4px;
+  width: 30px;
+  transition: transform 400ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.pxc-lateral-boton .pxc-lateral-boton-icono::before {
+  content: "";
+  transform: rotate(405deg);
+}
+.pxc-lateral-boton .pxc-lateral-boton-icono {
+  background-color: transparent;
+}
+.pxc-lateral-boton .pxc-lateral-boton-icono::after {
+  content: "";
+  transform: rotate(-405deg);
+}
+
+/* 3.2 Boton de colapsar */
+.pxc-main-menu-boton {
+  display: none;
+  margin: 0 0 0 auto;
+  width: 45px;
+  height: 45px;
+  border: none;
+  background-color: transparent;
+}
+.pxc-main-menu-boton .pxc-main-menu-boton-icono,
+.pxc-main-menu-boton .pxc-main-menu-boton-icono::before,
+.pxc-main-menu-boton .pxc-main-menu-boton-icono::after {
+  display: block;
+  background-color: #253777;
+  position: absolute;
+  height: 4px;
+  width: 30px;
+  transition: transform 400ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.pxc-main-menu-boton .pxc-main-menu-boton-icono::before {
+  content: "";
+  margin-top: -8px;
+}
+.pxc-main-menu-boton .pxc-main-menu-boton-icono::after {
+  content: "";
+  margin-top: 8px;
+}
+
+/*Intentar NO modificar, pues es genérica del Theme.
+*/
+/* Cards */
+.pxc-card .pxc-card-image img {
+  max-width: 100%;
+  height: auto;
+}
+.pxc-card .pxc-card-body p {
+  word-break: break-word;
+}
+
+/* Botones */
+.pxc-boton {
+  display: inline-block;
+  margin-bottom: 0;
+}
+.pxc-boton a {
+  border: 1px solid #253777;
+  border-radius: 0;
+  padding: 0.75rem 2rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  width: -moz-fit-content;
+  width: fit-content;
+  display: block;
+  margin: 0 1rem 0 0;
+  font-size: 0.8rem !important;
+  letter-spacing: 0.015rem;
+  color: #253777;
+  background-color: #fbfbfb;
+  transition: opacity 0.3s;
+}
+.pxc-boton a:hover, .pxc-boton a:active {
+  opacity: 0.85;
+}
+
+.pxc-boton-cta a {
+  font-family: m-bold;
+}
+
+.pxc-boton-offset a {
+  border: 1px solid #fbfbfb;
+  color: #fbfbfb;
+  background-color: #253777;
+}
+
+/* Carruseles */
+/* BS */
+/* Slick slider */
+.pxc-ss-carrusel .slick-dots {
+  bottom: -35px;
+}
+.pxc-ss-carrusel .slick-dots li button:before {
+  font-size: calc(1.325rem + 0.9vw) !important;
+}
+.pxc-ss-carrusel img {
+  max-width: 100%;
+  height: auto;
+}
+
+.pxc-ss-carrusel-plano img {
+  margin: 0 auto;
+}
+
+/* Acordeon */
+.pxc-acordeon .accordion-button {
+  font-family: "m-semibold";
+  color: #253777;
+  padding-right: 1.5rem;
+}
+.pxc-acordeon .accordion-button:not(.collapsed) {
+  border-radius: 0 !important;
+  background-color: rgba(250, 211, 103, 0.25);
+  box-shadow: none;
+}
+.pxc-acordeon .pxc-acordion-contador {
+  display: none;
+}
+.pxc-acordeon :not(.pxc-acordeon-reset) li {
+  margin-bottom: 1rem;
+  position: relative;
+  list-style: none;
+}
+.pxc-acordeon :not(.pxc-acordeon-reset) li:before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: -1.5rem;
+  top: 0.75rem;
+  width: 6px;
+  height: 6px;
+  transform: rotate(315deg);
+  transition: all 0.5s;
+  border-right: 1px solid #253777;
+  border-bottom: 1px solid #253777;
+}
+.pxc-acordeon :not(.pxc-acordeon-reset) img {
+  max-width: 100%;
+  height: auto;
+}
+
+.pxc-acordeon-numerado .pxc-acordion-contador {
+  background-color: #253777;
+  display: inline-block;
+  margin: 0 1rem 0;
+  border-radius: 100%;
+  color: #fff;
+  padding: 0.35rem 0.7rem;
+}
+
+.accordion-item {
+  border-radius: 0 !important;
+  border: 1px solid #e2ebfc;
+}
+
+/* Pestana normal (UL) */
+.pxc-pestana {
+  border-bottom: 5px solid #0037c5;
+}
+.pxc-pestana .nav-link {
+  border-radius: 0;
+  margin: 0;
+  border: 0;
+  color: #0037c5;
+  opacity: 0.5;
+  font-size: 1rem !important;
+  padding: 0.7rem 1.2rem;
+}
+.pxc-pestana .nav-link:hover, .pxc-pestana .nav-link:focus, .pxc-pestana .nav-link:visited {
+  border: 0;
+  opacity: 0.5;
+}
+.pxc-pestana .nav-link.active {
+  background-color: #0037c5;
+  border: none;
+  color: #fff;
+  opacity: 1;
+  font-family: "m-semibold";
+}
+
+/* Pestana vertical */
+.pxc-pestana-vertical .nav-pills {
+  border-right: 5px solid #0037c5;
+}
+.pxc-pestana-vertical .nav-pills .nav-link {
+  font-family: "m-medium";
+}
+.pxc-pestana-vertical .nav-pills .nav-link.active, .pxc-pestana-vertical .nav-pills .show > .nav-link {
+  background-color: #0037c5;
+  color: #fff;
+  border-radius: 0;
+  font-family: "m-semibold";
+}
+
+/* Formularios expuestos */
+.pxc-exposed {
+  width: 100%;
+  display: flex;
+  margin-bottom: 1.5rem;
+  justify-content: center;
+  padding: 1.5rem 0.75rem;
+}
+.pxc-exposed form {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.pxc-exposed form input {
+  width: 100%;
+  padding: 0.5rem 2rem;
+  border-radius: 0;
+  border: 1px solid #ccc;
+}
+.pxc-exposed form input.button {
+  width: -moz-fit-content;
+  width: fit-content;
+  border-radius: 0 !important;
+  border: 1px solid #0037c5;
+  background-color: #0037c5;
+  font-family: "m-medium";
+  color: #fff;
+}
+.pxc-exposed form select {
+  border-radius: 0;
+  border: 1px solid #ccc;
+}
+.pxc-exposed form > div {
+  margin: 0;
+  padding: 0.75rem;
+}
+.pxc-exposed form label {
+  font-family: "m-semibold";
+  color: #253777;
+  padding-bottom: 0.5rem;
+}
+.pxc-exposed form fieldset {
+  margin: 0;
+}
+
+/* Links y archivos */
+.pxc-archivo ul {
+  margin: 1.5rem 0 0 0;
+  list-style: none;
+  text-decoration: none;
+  padding-left:0;
+}
+.pxc-links ul {
+  margin: 0;
+  list-style: none;
+  text-decoration: none;
+  padding-left:0;
+}
+.pxc-archivo ul li, .pxc-links ul li {
+  padding: 0 0 0.75rem 1.5rem;
+}
+.pxc-archivo ul li a, .pxc-links ul li a {
+  text-decoration: none;
+  position: relative;
+}
+.pxc-archivo ul li span a, .pxc-links ul li a {
+  position: relative;
+  word-break: break-word;
+  font-family: "m-medium";
+  font-weight: bold;
+}
+.pxc-archivo ul li span a:hover, .pxc-links ul li a:hover {
+    text-decoration:underline;
+}
+.pxc-archivo ul li span > span, .pxc-links ul li span > span {
+  color: #0037c5;
+}
+
+.pxc-archivo ul li span a:after {
+  content: "";
+  display: block;
+  background: url(/themes/custom/pixel/img/iconos/doc-gris.png);
+  width: 18px;
+  height: 18px;
+  position: absolute;
+  top: 0;
+  left: -1.5rem;
+  background-size: 95%;
+  background-repeat: no-repeat;
+}
+
+.pxc-links ul li span a:after, .pxc-links ul li a:after {
+  content: "";
+  display: block;
+  background: url(/themes/custom/pixel/img/iconos/enlaces-doc-gris.png);
+  width: 18px;
+  height: 18px;
+  position: absolute;
+  top: 0;
+  left: -1.5rem;
+  background-size: 95%;
+  background-repeat: no-repeat;
+}
+.pxc-links-card ul {
+  margin: 0;
+  list-style: none;
+}
+.pxc-links-card ul li {
+  margin: 0;
+  list-style: none;
+}
+.pxc-link-stand {
+    padding:0 0 0.75rem 1.5rem;
+}
+.pxc-link-stand a {
+  position: relative;
+  word-break: break-word;
+  font-family: "m-medium";
+  font-weight: bold;
+}
+.pxc-link-stand a:hover {
+   text-decoration:underline; 
+}
+.pxc-link-stand a:after {
+  content: "";
+  display: block;
+  background: url(/themes/custom/pixel/img/iconos/enlaces-doc-gris.png);
+  width: 18px;
+  height: 18px;
+  position: absolute;
+  top: 0;
+  left: -1.5rem;
+  background-size: 95%;
+  background-repeat: no-repeat;   
+}
+
+
+/* Pager */
+.pxc-pager {
+  padding-top: 1rem;
+}
+.pxc-pager ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  padding: 0;
+}
+.pxc-pager ul li {
+  padding-right: 0.75rem;
+  font-size: 0.9rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.075rem;
+  color: #0037c5;
+  font-family: "m-medium";
+  margin-bottom: 0.75rem;
+}
+.pxc-pager ul li a, .pxc-pager ul li span {
+  font-size: 0.9rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.075rem;
+  color: #0037c5;
+  font-family: "m-medium";
+  margin-bottom: 0.75rem;
+  text-decoration: none;
+}
+
+/* Tabla */
+.pxc-tabla table tbody {
+  border-top: 1px solid #f4f4f4;
+}
+.pxc-tabla table tr {
+  border-bottom: 1px solid #f4f4f4;
+}
+.pxc-tabla table tr th, .pxc-tabla table tr td {
+  border: none;
+}
+.pxc-tabla table tr th:even, .pxc-tabla table tr td:even {
+  background-color: #fbfbfb;
+}
+
+/* Responsive*/
+/* Large devices (Tablet wide to middle screen desktop) */
+/* Medium devices (tablets) */
+/* Small devices */
+@media (max-width: 767px) {
+  .pxc-exposed {
+    display: block;
+  }
+  .pxc-exposed form {
+    display: block;
+  }
+}
+/*
+Theme: Pixel
+Estilos aplicables para la decoracion y el manejo del branding
+Esta hoja es la que más cambia entre proyectos.
+*/
+/* General */
+/* ---------------------------------------------- */
+/* 1. Brand */
+/* 2. Menus y navegacion */
+/* Top */
+#pxc-top-header a, #pxc-top-header a:visited {
+  color: #fff;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 0.8rem !important;
+  letter-spacing: 0.015rem;
+  opacity: 0.75;
+}
+#pxc-top-header a:hover {
+  color: #fbfbfb;
+}
+
+.region-top .menu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+#pxc-menu-principal-theme-down-collapse {
+  border-bottom: 1px solid #f4f4f4;
+}
+#pxc-menu-principal-theme-down-collapse .form-search {
+  border: 1px solid #ccc;
+  font-size: 0.9rem !important;
+  padding: 0.75rem 0.35rem;
+  width: 100%;
+}
+#pxc-menu-principal-theme-down-collapse .button {
+  background-color: #0037c5;
+  color: #fff;
+  border: 1px solid #0037c5;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.015rem;
+}
+#pxc-menu-principal-theme-down-collapse br {
+  display: none;
+}
+
+.pxc-main-menu ul li a {
+  text-decoration: none;
+}
+
+.pxc-main-menu-lista nav > ul {
+  align-items: center;
+}
+.pxc-main-menu-lista nav > ul li.pxc-menu-principal-boton-buscar span {
+  font-size: 0;
+  background-color: #0037c5;
+  background-image: url(/themes/custom/pixel/img/lupa.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 58px;
+  height: 56px;
+  cursor: pointer;
+  background-size: 60%;
+  z-index: 100;
+}
+.pxc-main-menu-lista nav > ul li ul {
+  border: 0;
+  width: 300px;
+  margin-left:-200px;
+}
+
+.region-fila-menu {
+  position: relative;
+  z-index: 5;
+}
+
+.pxc-menu-principal-boton-buscar span {
+  cursor: pointer;
+}
+
+/* 3. Footer */
+.pxc-footer-col-1, .pxc-footer-col-2, .pxc-footer-col-3, .pxc-footer-col-4 {
+  display: flex;
+  flex-flow: column;
+  justify-content: flex-end;
+}
+
+.pxc-footer {
+  background-color: #fbfbfb;
+  padding: 1.5rem 0;
+}
+.pxc-footer a, .pxc-footer p, .pxc-footer span {
+  text-decoration: none;
+  color: #253777;
+  font-size: 0.9rem !important;
+}
+
+.pxc-copyright {
+  padding: 1rem 0;
+  background-color: #fbfbfb;
+}
+.pxc-copyright p {
+  margin: 0;
+  color: #253777;
+  font-size: 0.9rem !important;
+  text-align: center;
+}
+
+#block-pixel-syndicate {
+  display: none;
+}
+
+/* 5. Decorativos */
+.pxc-page-title, .pxc-bloque-titulo {
+  padding-top: 3.5rem;
+  padding-bottom: 1.5rem;
+}
+.pxc-page-title h1, .pxc-bloque-titulo h1 {
+  font-family: "m-semibold";
+  color: #333;
+  letter-spacing:0.05rem;
+}
+.pxc-embebida .pxc-page-title, .pxc-embebida .pxc-bloque-titulo {
+   padding-top: 1.5rem;  
+}
+.pxc-page-title p, .pxc-bloque-titulo p {
+  color: #253777;
+  font-size: 1rem !important;
+}
+
+.pxc-header h2 {
+  font-family: "m-semibold";
+  color: #253777 !important;
+  padding-bottom: 0.75rem;
+  text-transform: uppercase;
+}
+
+.pxc-breadcrumbs {
+  padding: 1rem 0;
+}
+.pxc-breadcrumbs li {
+  padding: 0 0.55rem;
+  letter-spacing: 0.015rem;
+  border-left: 1px solid #0037c5;
+  text-transform: uppercase;
+}
+.pxc-breadcrumbs li:before {
+  display: none;
+}
+.pxc-breadcrumbs li:first-child {
+  padding: 0 !important;
+  border-left: none;
+}
+.pxc-breadcrumbs .pxc-last-bread {
+  font-family: "m-semibold";
+}
+
+.pxc-lateral .menu--main ul li a, .pxc-lateral .menu--main ul li span {
+  text-decoration: none;
+}
+
+.pxc-promo-bloque-inicio .pxc-card {
+  max-width: 100%;
+  padding-right: calc(var(--bs-gutter-x) * 0.5);
+  padding-left: calc(var(--bs-gutter-x) * 0.5);
+  margin-top: var(--bs-gutter-y);
+}
+.pxc-promo-bloque-inicio .pxc-card article {
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: #fbfbfb;
+  transition: all 0.5s;
+  padding-top: 3rem;
+  padding-right: 0.75rem;
+  min-height: 100%;
+  position: relative;
+}
+.pxc-promo-bloque-inicio .pxc-card article:hover {
+  background-color: #f4f4f4;
+}
+.pxc-promo-bloque-inicio .pxc-card article .pxc-badge {
+  position: absolute !important;
+  right: 0;
+  top: 0;
+  float: none !important;
+}
+.pxc-promo-bloque-inicio .pxc-card a {
+  text-decoration: none;
+}
+
+.pxc-bloque ol li {
+  margin-bottom: 1rem;
+  position: relative;
+}
+.pxc-bloque a:not(.pxc-boton) {
+  text-decoration: none;
+  border-bottom: 1px solid #253777;
+  font-family: "m-medium";
+}
+.pxc-bloque .pxc-bloque-imagen-main {
+  padding: 1rem 0;
+}
+.pxc-bloque .pxc-bloque-imagen-main img {
+  width: 100%;
+  height: auto;
+}
+.pxc-bloque .pxc-bloque-videos {
+  padding: 1rem 0;
+}
+.pxc-bloque .pxc-bloque-videos iframe {
+  width: 100%;
+}
+.pxc-bloque .pxc-bloque-embebible {
+  padding: 1rem 0;
+}
+.pxc-bloque .pxc-bloque-embebible iframe {
+  width: 100%;
+  min-height: 500px;
+}
+
+/* 5.1 Estilos genéricos */
+.pxc-titulo {
+  font-family: m-semibold;
+  font-size: 1.25rem !important;
+  padding-bottom: 0.75rem;
+  display: block;
+  color: #253777;
+}
+.pxc-titulo a {
+  font-family: m-semibold;
+  font-size: 1.25rem !important;
+  text-decoration: none;
+  transition: all 0.5s;
+}
+.pxc-titulo a:hover {
+  text-decoration: underline;
+}
+.pxc-titulo span {
+  font-family: m-semibold;
+  color: #253777;
+}
+
+.pxc-descripcion {
+  font-size: 1rem !important;
+  padding-right: 0.75rem;
+}
+
+.pxc-badge {
+  padding: 2px 0 0 0;
+  background-color: #00c54d;
+  float: right;
+  font-size: 0.8rem !important;
+  color: #fff;
+  position:absolute;
+  top:.75rem;
+  right:.75rem;
+  width:25px;
+  height:25px;
+  border-radius:25px;
+  text-align:center;
+}
+.pxc-badge img {
+    width:15px;
+    height:auto;
+}
+
+.pxc-link-primario {
+  color: #253777 !important;
+  font-family: m-medium;
+  text-decoration: none;
+  border-bottom: 2px solid white;
+}
+.pxc-link-primario:hover {
+  border-bottom: 2px solid #253777;
+}
+
+.pxc-link-secundario {
+  color: #0037c5 !important;
+  text-decoration: none;
+  font-family: m-medium;
+  border-bottom: 2px solid white;
+}
+.pxc-link-secundario:hover {
+  border-bottom: 2px solid #0037c5;
+}
+
+.pxc-link-primario-flecha {
+  position: relative;
+}
+.pxc-link-primario-flecha:after {
+  content: "";
+  display: block;
+  position: absolute;
+  right: -1rem;
+  top: 50%;
+  margin-top: -4px;
+  width: 8px;
+  height: 8px;
+  border-right: 1px solid #253777;
+  border-bottom: 1px solid #253777;
+  transform: rotate(315deg);
+  transition: all 0.5s;
+}
+.pxc-link-primario-flecha:hover:after {
+  right: -1.5rem;
+}
+
+.pxc-link-secundario-flecha {
+  position: relative;
+}
+.pxc-link-secundario-flecha:after {
+  content: "";
+  display: block;
+  position: absolute;
+  right: -1rem;
+  top: 50%;
+  margin-top: -4px;
+  width: 8px;
+  height: 8px;
+  border-right: 1px solid #0037c5;
+  border-bottom: 1px solid #0037c5;
+  transform: rotate(315deg);
+  transition: all 0.5s;
+}
+.pxc-link-secundario-flecha:hover:after {
+  right: -1.5rem;
+}
+
+.pxc-link-out a:after {
+  content: url("data:image/svg+xml; utf8, <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='18' height='18' class='components-external-link__icon css-6wogo1-StyledIcon etxm6pv0' role='img' aria-hidden='true' focusable='false'><path d='M18.2 17c0 .7-.6 1.2-1.2 1.2H7c-.7 0-1.2-.6-1.2-1.2V7c0-.7.6-1.2 1.2-1.2h3.2V4.2H7C5.5 4.2 4.2 5.5 4.2 7v10c0 1.5 1.2 2.8 2.8 2.8h10c1.5 0 2.8-1.2 2.8-2.8v-3.6h-1.5V17zM14.9 3v1.5h3.7l-6.4 6.4 1.1 1.1 6.4-6.4v3.7h1.5V3h-6.3z'></path></svg>");
+  position: relative;
+  bottom: -3px;
+}
+
+.pxc-fecha {
+  text-transform: uppercase;
+  letter-spacing: 0.015rem;
+  color: #0037c5;
+  font-size: 0.8rem !important;
+}
+
+.pxc-topic {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pxc-topic li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-bottom: 1px solid #f4f4f4;
+}
+.pxc-topic li a, .pxc-topic li span {
+  color: #253777;
+  font-family: m-medium;
+  text-decoration: none;
+  padding: 0.75rem 1.35rem 0.75rem 0.35rem;
+  display: block;
+  position: relative;
+}
+.pxc-topic li a:after, .pxc-topic li span:after {
+  content: "";
+  display: block;
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  margin-top: -5px;
+  width: 10px;
+  height: 10px;
+  border-right: 1px solid #0037c5;
+  border-bottom: 1px solid #0037c5;
+  transform: rotate(315deg);
+  transition: all 0.5s;
+}
+.pxc-topic li a:hover:after, .pxc-topic li span:hover:after {
+  right: 0;
+}
+
+.pxc-topic-2 {
+  -moz-column-count: 2;
+       column-count: 2;
+}
+
+.pxc-topic-3 {
+  -moz-column-count: 3;
+       column-count: 3;
+}
+
+.pxc-boton, .pxc-boton-p a {
+  padding: 0.75rem 2rem;
+  border: 1px solid #0037c5 !important;
+  color: #0037c5 !important;
+  text-decoration: none;
+  position: relative;
+  display: inline-block;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+.pxc-boton:after, .pxc-boton-p a:after {
+  content: "";
+  display: block;
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  margin-top: -4px;
+  width: 8px;
+  height: 8px;
+  border-right: 1px solid #0037c5;
+  border-bottom: 1px solid #0037c5;
+  transform: rotate(315deg);
+  transition: all 0.5s;
+}
+.pxc-boton:hover, .pxc-boton-p a:hover {
+  border: 1px solid #253777 !important;
+  color: #fff !important;
+  background-color: #253777;
+}
+.pxc-boton:hover:after, .pxc-boton-p a:hover:after {
+  filter: invert(1) grayscale(1);
+}
+
+.pxc-boton-p {
+  margin: 1.5rem 0 !important;
+}
+
+.pxc-spacer {
+  height: 2.5rem !important;
+}
+
+.pxc-hr-primario {
+  border-bottom: 5px solid #253777;
+  opacity: 1;
+  margin-left: 0;
+}
+
+.pxc-hr-secundario {
+  border-bottom: 5px solid #0037c5;
+  opacity: 1;
+  margin-left: 0;
+}
+
+.pxc-lista-primario, .pxc-lista-secundario {
+  list-style: none;
+}
+.pxc-lista-primario li, .pxc-lista-secundario li {
+  margin-bottom: 1rem;
+  position: relative;
+  list-style: none;
+}
+.pxc-lista-primario li:before, .pxc-lista-secundario li:before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: -1.5rem;
+  top: 0.75rem;
+  width: 6px;
+  height: 6px;
+  transform: rotate(315deg);
+  transition: all 0.5s;
+}
+
+.pxc-lista-primario li::before {
+  border-right: 1px solid #253777;
+  border-bottom: 1px solid #253777;
+}
+
+.pxc-lista-secundario li::before {
+  border-right: 1px solid #0037c5;
+  border-bottom: 1px solid #0037c5;
+}
+
+.pxc-aviso {
+  background-color: rgba(250, 211, 103, 0.25);
+  border-left: 5px solid #0037c5;
+  padding: 1.5rem;
+  font-size: 1rem !important;
+  border-top-right-radius: 1.5rem;
+  border-bottom-right-radius: 1.5rem;
+}
+
+.pxc-micro-aviso {
+  background-color: #f4f4f4;
+  padding: 0.75rem 0.75rem 0.75rem 3rem;
+  font-size: 0.8rem !important;
+  font-family:"m-bold";
+  border-top:5px solid #fff;
+  border-bottom:5px solid #fff;
+  border-radius:.5rem;
+  display:block;
+  background-image:url('/themes/custom/pixel/img/iconos/advertencia.png');
+  background-position:8px center;
+  background-repeat:no-repeat;
+  background-size:25px;
+}
+
+.pxc-see-more a {
+  font-family: m-semibold;
+  font-size: 0.8rem !important;
+  letter-spacing: 0.015rem;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-bottom: 1px solid #253777;
+}
+
+.pxc-panel-colapsable {
+  padding: 2rem;
+  background-color: #fbfbfb;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.pxc-numero-grande {
+  display: inline-block;
+  background-color: #253777;
+  color: #fff;
+  font-family: m-bold;
+  font-size: calc(1.325rem + 0.9vw) !important;
+  width: 4rem;
+  height: 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100%;
+}
+
+.pxc-img img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 6 Tipos de contenido */
+/* 7 Correcciones */
+/* Responsive */
+/* ---------------------------------------------- */
+/* General por small devices */
+/* Large devices (Tablet wide to middle screen desktop) */
+@media (min-width: 1024px) and (max-width: 1344px) {
+  /* 5 */
+  .pxc-bloque-titulo p {
+    padding-right: 25%;
+  }
+}
+/* Medium devices (tablets) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* 1 */
+  #block-marcadelsitio-2 img {
+    width: 15%;
+    padding-left: 1rem;
+    padding-top: 1rem;
+  }
+  .pxc-lateral .menu--main > ul {
+    -moz-column-count: 2;
+         column-count: 2;
+  }
+  /* 2 */
+  .region-top .menu {
+    justify-content: start;
+  }
+  /* 5 */
+  .pxc-bloque-titulo p {
+    padding-right: 0;
+  }
+}
+/* Small devices */
+@media (max-width: 767px) {
+  /* 1 */
+  #pxc-top-header {
+    padding: 0.5rem 0;
+  }
+  #pxc-top-header ul li a {
+    font-size: 0.7rem !important;
+  }
+  #pxc-menu-principal-theme-down-collapse .col-2 {
+    width: 40%;
+  }
+  #pxc-menu-principal-theme-down-collapse .col-2 input {
+    width: 100%;
+  }
+  #pxc-menu-principal-theme-down-collapse .col-4 {
+    width: 60%;
+  }
+  /* 2 */
+  .region-top .menu {
+    justify-content: end;
+  }
+  /* 5 */
+  .pxc-bloque-titulo p {
+    padding-right: 0;
+  }
+}

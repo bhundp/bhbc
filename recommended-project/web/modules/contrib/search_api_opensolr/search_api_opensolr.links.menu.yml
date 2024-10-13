@@ -1,0 +1,5 @@
+search_api_opensolr.opensolr_config_form:
+  title: 'OpenSolr'
+  route_name: search_api_opensolr.opensolr_config_form
+  description: 'Configure the opensolr settings'
+  parent: search_api.overview

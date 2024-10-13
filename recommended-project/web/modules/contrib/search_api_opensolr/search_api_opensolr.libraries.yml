@@ -1,0 +1,10 @@
+# @todo: Eventually remove this and its files if not needed anymore.
+admin-tweaks:
+  version: VERSION
+  css:
+    theme:
+      assets/css/pass-show.css: {}
+  js:
+    assets/js/admin-tweaks.js: {}
+  dependencies:
+    - core/jquery

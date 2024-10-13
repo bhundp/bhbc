@@ -1,0 +1,30 @@
+{#
+/**
+ * @file
+ * Default theme implementation of a link with separate title and URL elements.
+ *
+ * Available variables:
+ * - link: The link that has already been formatted by l().
+ * - title: (optional) A descriptive or alternate title for the link, which may
+ *   be different than the actual link text.
+ *
+ * @see template_preprocess()
+ * @see template_preprocess_link_formatter_link_separate()
+ *
+ * @ingroup themeable
+ */
+#}
+{% apply spaceless %}
+  {# Si quiere se puede imprimir el titulo, por ahora lo dejé quieto. #}
+  {# title #}
+  {# link #}
+  {% set linkRaw = link|render|striptags %}
+  
+  {% if 'youtube' in linkRaw %}
+        {% set linkRaw1 = linkRaw|split('?v=') %}
+        <iframe id="player_{{  linkRaw1[1] }}" class="pxc-frame-videos" src="https://www.youtube.com/embed/{{  linkRaw1[1] }}?enablejsapi=1&origin=https://bh.mantenimientoenterritorio.co" title="YouTube video player" frameborder="0" data-pxc-yt-id="{{  linkRaw1[1] }}"></iframe>
+        <!--<div id="player-{#  linkRaw1[1] #}" data-pxc-yt-id="{#  linkRaw1[1] #}" class="pxc-player-youtube"></div>-->
+  {% else %}
+    {{ link }}
+  {% endif %}
+{% endapply %}

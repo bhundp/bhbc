@@ -1,0 +1,22 @@
+{
+    "name": "baxtian/pixel_file_from_data",
+    "description": "Add ECA to create a file from data.",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Juan Sebastián Echeverry (baxtian)",
+            "homepage": "https://sebaxtian.com",
+            "role": "Maintainer"
+        }
+    ],
+    "support": {
+        "issues": "https://drupal.org/project/issues/pixel_file_from_data",
+        "source": "https://git.drupalcode.org/project/pixel_file_from_data"
+    },
+    "require": {
+        "php": ">=7.4",
+        "drupal/eca": "^1.1"
+    }
+}
+

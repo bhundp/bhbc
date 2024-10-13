@@ -1,0 +1,65 @@
+.stream_container {
+  text-align: center;
+}
+
+.stream_container video {
+  width: 300px;
+  height: 170px;
+  display: block;
+  margin: 20px auto;
+}
+
+.stream_container .stop_record,
+.stream_container.recording .record,
+.stream_container.recording .use_record,
+.stream_container.recording.with_record .use_record,
+.stream_container .use_record {
+  display: none;
+}
+
+.stream_container.recording .stop_record,
+.stream_container .record,
+.stream_container.with_record .use_record {
+  display: initial;
+}
+
+.field--type-media-capture-field-type .form-item textarea {
+  display: none;
+}
+
+.quote_link {
+  font-size: 0.6em;
+  vertical-align: super;
+  cursor: pointer;
+  padding: 0 3px;
+}
+
+.pxc-ai-body-message-machine-references.quotes>div {
+  padding-top: 10px;
+}
+
+.collapse_title {
+  cursor: pointer;
+}
+
+.citation_item {
+  padding-top: 10px;
+}
+
+.citation_item:nth-of-type(2n+1) {
+  background-color: #ededed;
+}
+
+.chat-message-line .documento .texto {
+  display: none;
+}
+
+.modal-content.loading #pxc-ai-footer {
+  opacity: 0.4;
+}
+
+#pxc-ai-background .row.loading .texto.warning {
+  background-image: none;
+  width: 100%;
+  font-size: 16px;
+}

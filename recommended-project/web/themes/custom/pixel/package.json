@@ -1,0 +1,24 @@
+{
+  "name": "pixel",
+  "version": "1.0.0",
+  "description": "Pixel JSON",
+  "main": "index.js",
+  "scripts": {
+    "development": "mix",
+    "watch": "mix watch",
+    "watch-poll": "mix watch -- --watch-options-poll=1000",
+    "hot": "mix watch --hot",
+    "production": "mix --production"
+  },
+  "author": "PixelClub",
+  "license": "ISC",
+  "dependencies": {
+    "laravel": "^0.0.1",
+    "laravel-mix": "^6.0.49",
+    "mix": "^0.0.1"
+  },
+  "devDependencies": {
+    "sass": "^1.58.0",
+    "sass-loader": "^12.6.0"
+  }
+}

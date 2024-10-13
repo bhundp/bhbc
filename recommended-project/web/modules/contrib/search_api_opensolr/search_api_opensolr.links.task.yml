@@ -1,0 +1,21 @@
+search_api_opensolr.search_api:
+  route_name: search_api.overview
+  title: 'Search API'
+  base_route: search_api.overview
+  weight: 0
+search_api_opensolr.opensolr:
+  route_name: search_api_opensolr.opensolr_config_form
+  title: 'OpenSolr'
+  base_route: search_api.overview
+  weight: 1
+search_api_opensolr.opensolr_server:
+  route_name: search_api_opensolr.opensolr_config_zip_import
+  title: 'Opensolr'
+  base_route: entity.search_api_server.canonical
+  weight: 20
+search_api_opensolr.zip_config_import:
+  route_name: search_api_opensolr.opensolr_config_zip_import
+  title: 'Import Config Zip'
+  base_route: entity.search_api_server.canonical
+  parent_id: search_api_opensolr.opensolr_server
+  weight: 0

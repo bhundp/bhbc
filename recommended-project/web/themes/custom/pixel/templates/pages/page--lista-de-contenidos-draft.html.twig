@@ -1,0 +1,130 @@
+{{ attach_library('pixel/over-styling') }}
+<!-- Sin header --> 
+<!-- Cuerpo --> 
+{% if page.lateral %}
+<div id="pxc-lateral" class="pxc-lateral">
+    <div class="pxc-fantasma"></div>
+    <button id="pxc-lateral-boton" class="pxc-lateral-boton" type="button" aria-controls="pxc-lateral" aria-expanded="false" aria-label="Cerrar navegaci&oacute;n" onclick="closeNav()"> <span class="pxc-lateral-boton-icono"></span> </button>
+	{{ page.lateral }}
+</div>
+{% endif %}
+<section id="pxc-main-content">
+	{% if page.pre_content %}
+	<div id="pxc-pre-content">
+		{{ page.pre_content }}
+	</div>{% endif %}
+	{% if page.fila_0 %}
+	<div id="pxc-fila0">
+		{{ page.fila_0 }}
+	</div>{% endif %}
+	{% if page.fila_0a %}
+	<div id="pxc-fila0a">
+		{{ page.fila_0a }}
+	</div>{% endif %}
+	{% if page.fila_1 %}
+	<div id="pxc-fila1">
+		{{ page.fila_1 }}
+	</div>{% endif %}
+	{% if page.fila_1a %}
+	<div id="pxc-fila1a" class="pxc-embebida">
+		{{ page.fila_1a }}
+	</div>{% endif %}
+	{% if not is_front %}
+	{% if page.content %}
+		<div id="pxc-main" class="container-xxl">
+			<div class="row">
+				{% if page.sidebar %}
+					{% if page.inverter %}
+						<div class="col-md-12 col-lg-9 pxc-main-content pxc-main-col-1">
+							<a id="main-content" tabindex="-1"></a>
+							{{ page.content }}
+						</div>
+						<aside class="layout-sidebar col-md-12 col-lg-3 pxc-main-col-2">
+							{{ page.sidebar }}
+						</aside>
+					{% else %}
+						<aside class="layout-sidebar col-lg-3 pxc-main-col-2-1">
+							{{ page.sidebar }}
+						</aside>
+						<div class="col-lg-9 pxc-main-content pxc-main-col-1-1">
+							<a id="main-content" tabindex="-1"></a>
+							{{ page.content }}
+						</div>
+					{% endif %}
+				{% else %}
+					<div class="col-md-12 pxc-main-content pxc-main-col-0 pxc-embebida">
+						<a id="main-content" tabindex="-1"></a>
+						{{ page.content }}
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	{% endif %}{% endif %}{% if page.fila_2 %}
+	<div id="pxc-fila2">
+		{{ page.fila_2 }}
+	</div>{% endif %}
+	{% if page.fila_2a %}
+	<div id="pxc-fila2a">
+		{{ page.fila_2a }}
+	</div>{% endif %}
+	{% if page.fila_3 %}
+	<div id="pxc-fila3">
+		{{ page.fila_3 }}
+	</div>{% endif %}
+</section>
+
+{% if page.modal %}
+<!-- Modal -->
+<div class="modal fade" id="themeModal" tabindex="-1" aria-labelledby="themeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="themeModalLabel"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {{ page.modal }}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+<!-- Fin cuerpo -->
+
+
+{% if page.modal1 %}
+<!-- Modal -->
+<div class="modal fade" id="themeModal1" tabindex="-1" aria-labelledby="themeModalLabel1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="themeModalLabel1"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {{ page.modal1 }}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+<!-- Fin cuerpo -->
+
+
+{% if page.modal_comentarios %}
+<!-- Modal -->
+<div class="modal fade" id="themeModal-comentarios" tabindex="-1" aria-labelledby="themeModalLabel-comentarios" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="themeModalLabel-comentarios">Regresar</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {{ page.modal_comentarios }}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+<!-- Fin cuerpo -->

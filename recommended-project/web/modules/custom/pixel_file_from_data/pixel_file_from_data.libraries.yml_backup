@@ -1,0 +1,10 @@
+capture:
+  version: 1.0.x
+  css:
+    theme:
+      assets/main.css: {}
+  js:
+    assets/docToText.js: {}
+    assets/media.js: {},
+    assets/chat.js: {},
+    assets/main.js: {}

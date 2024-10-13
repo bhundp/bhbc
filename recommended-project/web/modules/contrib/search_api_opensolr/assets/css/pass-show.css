@@ -1,0 +1,14 @@
+.pass-show-wrapper {
+  position: relative;
+}
+.pass-show-wrapper .opensolr-toggle-password {
+  cursor: pointer;
+  margin-left: 5px;
+  color: #f36c01;
+  transition: .3s ease all;
+}
+.pass-show-wrapper .opensolr-toggle-password:hover {
+  color: #333333;
+}
+
+/*# sourceMappingURL=pass-show.css.map */

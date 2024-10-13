@@ -1,0 +1,7 @@
+azure_mailer.config:
+  path: '/admin/config/config/azure_mailer'
+  defaults:
+    _form: '\Drupal\azure_mailer\Form\AzureMailerSettingsForm'
+    _title: 'Azure Communication Services Mailer Settings'
+  requirements:
+    _permission: 'administer site configuration'

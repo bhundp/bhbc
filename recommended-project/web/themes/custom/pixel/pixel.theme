@@ -1,0 +1,85 @@
+<?php
+function pixel_preprocess(&$variables, $hook) {
+  try {
+    $variables['is_front'] = \Drupal::service('path.matcher')->isFrontPage();
+  }
+  catch (Exception $e) {
+    $variables['is_front'] = FALSE;
+  }
+  // Ensure the cache varies correctly (new in Drupal 8.3).
+  $variables['#cache']['contexts'][] = 'url.path.is_front';
+  
+  // Pixel Biblioteca Humana
+  // 1. Hacer omnipresente el ID cuando lo que se visualiza es un nodo.
+  if(\Drupal::request()->attributes->get('node')) {
+    $node = \Drupal::request()->attributes->get('node');
+    $nid = $node->id();
+    $variables['nodeId'] = $nid;
+  }
+  $variables['curUsuId'] = \Drupal::currentUser()->id();
+  
+  // 2. Traer valores GET sin cache para poder diferenciar las ventanas de comentarios y mensajes directos.
+  if(isset($_GET['uicomments'])) {
+    $variables['get']['uicomments'] = $_GET['uicomments'];
+  }
+  if(isset($_GET['uienlaces'])) {
+    $variables['get']['uienlaces'] = $_GET['uienlaces'];
+  }
+  if(isset($_GET['uimessages'])) {
+    $variables['get']['uimessages'] = $_GET['uimessages'];
+  }
+  if(isset($_GET['tagging'])) {
+    $variables['get']['tagging'] = $_GET['tagging'];
+  }
+  if(isset($_GET['status'])) {
+    $variables['get']['status'] = $_GET['status'];
+  }
+  if(isset($_GET['uidetails'])) {
+    $variables['get']['uidetails'] = $_GET['uidetails'];
+  }
+  $variables['#cache']['contexts'][] = 'url.query_args';
+  $variables['#cache']['contexts'][] = 'user';
+  if(isset($_POST['texto'])) {
+      $variables['texto'] = $_POST['texto'];
+  }
+  if(isset($_POST['documentos'])) {
+      $variables['documentos'] = $_POST['documentos'];
+  }
+}
+
+function pixel_preprocess_comment(&$variables) {
+  // Getting the node creation time stamp from the comment object.
+  $date = $variables['comment']->getCreatedTime();
+  $now = time();
+  // Here you can use drupal's format_date() function, or some custom php date formatting.
+  $variables['pre_created'] = "";
+  if(($now - $date) <= 2592000) {
+    $variables['created'] = \Drupal::service('date.formatter')->formatInterval(REQUEST_TIME - $date);
+    $variables['pre_created'] = "Hace ";
+  }else{
+    if (date('Y',$date) === date('Y',$now)) {
+        $variables['created'] = \Drupal::service('date.formatter')->format($date, 'custom', 'M j');
+    }else{
+        $variables['created'] = \Drupal::service('date.formatter')->format($date, 'custom', 'M Y');
+    }
+  }
+}
+
+function pixel_preprocess_node(&$variables) {
+  // Getting the node creation time stamp from the comment object.
+  $date = $variables['node']->getCreatedTime();
+  $now = time();
+  // Here you can use drupal's format_date() function, or some custom php date formatting.
+  $variables['pre_created'] = "";
+  $variables['uid'] = \Drupal::currentUser()->id();
+  if(($now - $date) <= 2592000) {
+    $variables['created'] = \Drupal::service('date.formatter')->formatInterval(REQUEST_TIME - $date);
+    $variables['pre_created'] = "Hace ";
+  }else{
+    if (date('Y',$date) === date('Y',$now)) {
+        $variables['created'] = \Drupal::service('date.formatter')->format($date, 'custom', 'M j');
+    }else{
+        $variables['created'] = \Drupal::service('date.formatter')->format($date, 'custom', 'M Y');
+    }
+  }
+}

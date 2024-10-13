@@ -1,0 +1,50 @@
+name: PIXEL-9
+type: theme
+description: 'El theme del proyecto creado para Drupal 8 a 10 basado en Bootstrap.'
+package: Core
+core_version_requirement: ^8 || ^9  || ^10
+
+libraries:
+  - pixel/pixel-js
+  - pixel/global-styling  
+
+base theme: false
+
+regions:
+  top: Top
+  preheader_left: Pre Header Left
+  preheader_right: Pre Header Right  
+  header: Header
+  lateral: Lateral
+  pre_content: Pre content
+  branding: Branding
+  fila_menu: 'Menu'
+  fila_menu_usuario_2: 'Menu usuario complemento' 
+  fila_menu_usuario: 'Menu usuario'  
+  fila_menudown: 'Menu Abajo'    
+  fila_0: 'Row 0'
+  fila_0a: 'Row 0a'
+  fila_1: 'Row 1'
+  fila_1a: 'Row 1a'
+  sidebar: Sidebar
+  content: Content
+  fila_2: 'Row 2'
+  fila_2a: 'Row 2a'
+  fila_3: 'Row 3'
+  footer: Footer
+  footerizq: Footer Left
+  footerizq2: Footer Left 2
+  footerder: Footer Right
+  posfooter: Pos Footer
+  abs_footer: Absolute Footer
+  abs_footer_1: Absolute Footer 1  
+  modal: Modal
+  modal1: Modal 1 
+  modal2: Modal 2   
+  modal_comentarios: Modal Comentarios
+  inverter: Inverter
+  strech: Strecher  
+  super: Super Top  
+  style: Estilos  
+  script: Rutinas  
+  

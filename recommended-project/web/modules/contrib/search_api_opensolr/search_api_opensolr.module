@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * @file
+ * Provides the main functionality for search_api_opensolr module.
+ */
+
+use Drupal\search_api\ServerInterface;
+use Drupal\search_api_opensolr\ServerOperations;
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function search_api_opensolr_search_api_server_insert(ServerInterface $entity) {
+  return \Drupal::service('class_resolver')
+    ->getInstanceFromDefinition(ServerOperations::class)
+    ->serverInsert($entity);
+}

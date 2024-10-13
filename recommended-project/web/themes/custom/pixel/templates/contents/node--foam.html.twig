@@ -1,0 +1,750 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a node.
+ *
+ * Available variables:
+ * - node: The node entity with limited access to object properties and methods.
+ *   Only method names starting with "get", "has", or "is" and a few common
+ *   methods such as "id", "label", and "bundle" are available. For example:
+ *   - node.getCreatedTime() will return the node creation timestamp.
+ *   - node.hasField('field_example') returns TRUE if the node bundle includes
+ *     field_example. (This does not indicate the presence of a value in this
+ *     field.)
+ *   - node.isPublished() will return whether the node is published or not.
+ *   Calling other methods, such as node.delete(), will result in an exception.
+ *   See \Drupal\node\Entity\Node for a full list of public properties and
+ *   methods for the node object.
+ * - label: (optional) The title of the node.
+ * - content: All node items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - author_picture: The node author user entity, rendered using the "compact"
+ *   view mode.
+ * - metadata: Metadata for this node.
+ * - date: (optional) Themed creation date field.
+ * - author_name: (optional) Themed author name field.
+ * - url: Direct URL of the current node.
+ * - display_submitted: Whether submission information should be displayed.
+ * - attributes: HTML attributes for the containing element.
+ *   The attributes.class element may contain one or more of the following
+ *   classes:
+ *   - node: The current template type (also known as a "theming hook").
+ *   - node--type-[type]: The current node type. For example, if the node is an
+ *     "Article" it would result in "node--type-article". Note that the machine
+ *     name will often be in a short form of the human readable label.
+ *   - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+ *     teaser would result in: "node--view-mode-teaser", and
+ *     full: "node--view-mode-full".
+ *   The following are controlled through the node publishing options.
+ *   - node--promoted: Appears on nodes promoted to the front page.
+ *   - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+ *     teaser listings.
+ *   - node--unpublished: Appears on unpublished nodes visible only to site
+ *     admins.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - content_attributes: Same as attributes, except applied to the main
+ *   content tag that appears in the template.
+ * - author_attributes: Same as attributes, except applied to the author of
+ *   the node tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ * - view_mode: View mode; for example, "teaser" or "full".
+ * - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+ * - page: Flag for the full page state. Will be true if view_mode is 'full'.
+ * - readmore: Flag for more state. Will be true if the teaser content of the
+ *   node cannot hold the main body content.
+ * - logged_in: Flag for authenticated user status. Will be true when the
+ *   current user is a logged-in member.
+ * - is_admin: Flag for admin user status. Will be true when the current user
+ *   is an administrator.
+ *
+ * @see template_preprocess_node()
+ *
+ * @ingroup themeable
+ */
+#}
+{% set pid = node.nid.value %}
+{% set titulo = node.title.value %}
+{% set tipoFoam = node.field_tipo_de_foam.value %}
+    
+  {# 1. Control de la plantilla #}
+  
+  {% set plantillaFoam = 0 %}
+  {% set plantillaFoamSub1 = 0 %}
+  {% set comentariosFoam = 0 %}
+  {% set enlacesFoam = 0 %}
+  {% set clasePlantilla = "pxc-plantilla-0" %}
+  
+      {# Aqui se deben establecer las diferencias, que campos se imprimen cuales no, etc. #}
+      {% if get.uicomments is defined and get.uicomments is not empty%} 
+        {% if get.uicomments == "1" %}
+            <!-- UI Foam de comentarios -->
+            {% set plantillaFoam = 1 %}
+            {% set clasePlantilla = "pxc-plantilla-1" %}
+        {% endif %}
+      {% elseif get.uienlaces is defined and get.uienlaces is not empty%} 
+        {% if get.uienlaces == "1" %}
+            <!-- UI Foam de enlaces -->
+            {% set plantillaFoam = 4 %}
+            {% set clasePlantilla = "pxc-plantilla-4" %}
+        {% endif %}
+      {% elseif get.tagging is defined and get.tagging is not empty%} 
+        {% if get.tagging == "1" %}
+            <!-- UI Foam de tags -->
+            {% set plantillaFoam = 5 %}
+            {% set clasePlantilla = "pxc-plantilla-5" %}
+        {% endif %}
+      {% elseif get.uidetails is defined and get.uidetails is not empty%} 
+        {% if get.uidetails == "1" %}
+            <!-- UI Foam de tags -->
+            {% set plantillaFoam = 0 %}
+            {% set plantillaFoamSub1 = 1 %}
+            {% set clasePlantilla = "pxc-plantilla-00" %}
+        {% endif %}
+      {% else %}
+        <!-- UI Foam Standard -->
+        {% set plantillaFoam = 0 %}
+      {% endif %}    
+  
+  {# 1.1 Para los casos en donde las publicaciones blue (tipo1) se muestran embebidas, asuma su formato como Foam tipo 0 #}
+  {% if tipoFoam == "1" and (plantillaFoam == 1 or plantillaFoam == 5 or plantillaFoam == 4) %}
+      {% set tipoFoam = 0 %}  
+  {% endif %}
+
+  {# 2. Extraccion de variables #}
+  {% set comentariosFoam = node.field_comentarios.comment_count %}
+  {% set enlacesFoam = content.group_anexos_fields.field_adj_documentos['#items']|length + content.group_anexos_fields.field_links['#items']|length + content.group_anexos_fields.field_adj_foam_relacionados['#items']|length %}
+  {% set mediaFoam = content.group_tarjeta.field_adj_imagenes['#items']|length + content.group_tarjeta.field_adj_videos['#items']|length + content.group_tarjeta.field_adj_videos_remotos['#items']|length %}
+  {# I: content.group_tarjeta.field_adj_imagenes['#items']|length, V: content.group_tarjeta.field_adj_videos['#items']|length, R: content.group_tarjeta.field_adj_videos_remotos['#items']|length #}
+  {% set audioFoam = content.group_tarjeta.field_adj_audio['#items']|length  %}
+  {% set temasFoam = content.group_tag_fields.field_folksonomy['#items']|length + content.group_tag_fields.field_temas_contribuidos['#items']|length %}
+  
+  {# Monitoreo #}
+  {# set mediaFoam = 0 #}
+  {# set audioFoam = 0 #}
+  
+  {# 3. Impresi√≥n de la plantilla #}
+  
+  {% if tipoFoam == "1" %}
+    <article{{ attributes.addClass('pxc-foam-card pxc-foam-card-blue ' ~   clasePlantilla)}} id="pxc-foam-{{ pid }}">
+    {% else %}
+        <article{{ attributes.addClass('pxc-foam-card ' ~ clasePlantilla)}} id="pxc-foam-{{ pid }}">
+    {% endif %}
+    
+  <!--<h2><stong>{# pid #}</stong> - {# titulo #}</h2>-->
+  <span id="curNodeFoam" class="visually-hidden" data-pxc-plantilla="{{ plantillaFoam }}" data-pxc-subplantilla="{{ plantillaFoamSub1 }}" data-pxc-owner="{{ node.getOwnerId() }}-{{ curUsuId }}">{{ pid }}</span>
+  
+  {# 3.x Formato #}
+  {% if plantillaFoam == 0 %}
+    <div class="container-xxl"><div class="row"><div class="col-12">
+  {% elseif plantillaFoam == 5 %}
+    <div class="container-xxl"><div class="row"><div class="col-12">
+  {% else %}
+    <div class="container-xxl"><div class="row"><div class="col-4">
+  {% endif %}
+
+    {% if tipoFoam == "1" %}
+        {# Foam publicaciones #}
+        {# A 3.1 opciones de edicion para plantilla 0 #}
+        {% if (plantillaFoam == 0 and node.getOwnerId() == curUsuId and plantillaFoamSub1 == "0") %}
+          <div class="pxc-foam-acciones pxc-foam-acciones-blue">
+              <ul>
+                  <li><span class="pxc-foam-acciones-trigger">&#8942;</span>
+                    <ul>
+                        <li><a href="/node/{{ pid }}/edit">Editar</a></li>
+                        <li><a href="/node/{{ pid }}/delete">Eliminar</a></li>
+                    </ul>
+                  </li>
+              </ul>
+          </div>
+        {% endif %}
+  
+        {# A 3.1.5 T®™tulo #}
+        <span class="pxc-foam-tipo-blue">Publicaci&oacute;n oficial</span>
+        <span class="pxc-foam-titulo-blue">{{ titulo }}</span>
+  
+        {# A 3.2 Elementos de medios para todas las plantillas #}
+        <div class="container">
+            <div class="row">
+                {% if mediaFoam > 0 %}
+                    <div class="col-md-5">
+                      <div class="pxc-foam-media">
+                          {% if plantillaFoamSub1 == 1 %}
+                            <div class="slick-foam-media">
+                          {% else %}
+                            <div class="noslick-foam-media">
+                          {% endif %}
+                              {% set contadorGral = 0 %}
+                              {% if plantillaFoamSub1 == "0" %}
+                                {% set limite = 1 %}
+                              {% else %}
+                                {% set limite = mediaFoam %}
+                              {% endif %}
+                              <!-- Adjunto videos -->
+                              {% if node.field_adj_videos is not empty %}
+                                    {% set contador = 0 %}
+                                    {% for key, item in content.group_tarjeta.field_adj_videos['#items'] %}
+                                        {% if contadorGral < limite %}
+                                            <div class="pxc-foam-media-item">
+                                                {{ content.group_tarjeta.field_adj_videos[contador] }}
+                                            </div>
+                                            {% set contador = contador + 1 %}
+                                        {% endif %}
+                                        {% set contadorGral = contadorGral + 1 %}
+                                    {% endfor %}
+                              {% endif %}
+                              <!-- Adjunto videos remotos -->
+                              {% if node.field_adj_videos_remotos is not empty and contadorGral < limite %}
+                                    {% set contador = 0 %}
+                                    {% for key, item in content.group_tarjeta.field_adj_videos_remotos['#items'] %}
+                                        {% if contadorGral < limite %}
+                                            <div class="pxc-foam-media-item">
+                                                {{ content.group_tarjeta.field_adj_videos_remotos[contador] }}
+                                            </div>
+                                            {% set contador = contador + 1 %}
+                                        {% endif %}
+                                        {% set contadorGral = contadorGral + 1 %}
+                                    {% endfor %}
+                              {% endif %}
+                              <!-- Adjunto imagenes -->
+                              {% if node.field_adj_imagenes is not empty and contadorGral < limite %}
+                                    {% set contador = 0 %}
+                                    {% for key, item in content.group_tarjeta.field_adj_imagenes['#items'] %}
+                                        {% if contadorGral < limite %}
+                                            <div class="pxc-foam-media-item">
+                                                {% set altImagen = node.field_adj_imagenes[contador].alt %}
+                                                <img src="{{ node.field_adj_imagenes[contador].entity.uri.value | image_style('oficial') }}" alt="{{ altImagen }}" typeof="Image" class="img-fluid">
+                                            </div>
+                                            {% set contador = contador + 1 %}
+                                        {% endif %}
+                                        {% set contadorGral = contadorGral + 1 %}
+                                    {% endfor %}
+                              {% endif %}
+                          </div>
+                      </div>
+                      {% if (mediaFoam > 1 or audioFoam > 1) and plantillaFoamSub1 == "0" %}
+                            <div class="pxc-goto-details">
+                                <a id="pxc-button-foam-details-{{ pid }}" type="button" class="pxc-button-foam-details pxc-foam-details" data-bs-toggle="modal" data-bs-target="#themeModal-comentarios" data-pxc-id="{{ pid }}">Ver completo</a>
+                            </div>
+                      {% endif %}
+                    </div>
+                    <div class="col-md-7">
+                {% else %}
+                    <div class="col-md-12">
+                {% endif %}
+                        {# A 3.2 Informaci√≥n de la fecha y el autor para todas las plantillas #}
+                        {% if display_submitted %}
+                            <div class="pxc-foam-autor pxc-foam-autor-blue">
+                                <div class="row">
+                                    <div class="col-auto">{{ author_picture }}</div>
+                                    <div class="col">
+                                        <span class="pxc-name-autor">{{ author_name }}</span><br>
+                                        <span class="pxc-fecha-autor"><small>{{ pre_created }}{{ created }}</small></span>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                        {# A 3.3 Cuerpo del texto para todas las plantillas #}
+                        {% if node.body is not empty %}
+                            {% set body_largo = node.body.value|striptags %}
+                            {% if body_largo >= 400 %}
+                            <div class="pxc-foam-body pxc-foam-body-l">
+                                <div class="pxc-foam-body-largo">
+                            {% else %}
+                            <div class="pxc-foam-body">  
+                                <div class="pxc-foam-body-regular">
+                            {% endif %}
+                             {{ content.group_tarjeta.body }}
+                                </div>
+                            </div>
+                        {% endif %}
+                        <!-- Enlaces Foam -->
+                          {% if enlacesFoam > 0 %}
+                              <div class="pxc-foam-enlaces">
+                                <div class="row">
+                                    <div class="col-12">
+                                        {% if enlacesFoam == 1 %}
+                                            <span class="pxc-foam-card-titulo">{{ enlacesFoam }} Documento, enlace o anexo.</span>
+                                        {% else %}
+                                            <span class="pxc-foam-card-titulo">{{ enlacesFoam }} Documentos, enlaces o anexos.</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-12">
+                                        {% if enlacesFoam > 3 %}
+                                            <div class="pxc-foam-enlaces-largo">
+                                                {% set contador = 0 %}
+                                                <div class="pxc-archivo">
+                                                    <ul>
+                                                        {% for key, item in content.group_anexos_fields.field_adj_documentos['#items'] %}
+                                                                {% if contador < 3 %}
+                                                                    <li>{{ content.group_anexos_fields.field_adj_documentos[contador] }}
+                                                                {% set contador = contador + 1 %}</li>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                                <div class="pxc-links-card">
+                                                    <ul>{% set contadorL = 0 %}
+                                                        {% for key, item in content.group_anexos_fields.field_links['#items'] %}
+                                                                {% if contador < 3 %}
+                                                                    <li class="pxc-link-stand">{{ content.group_anexos_fields.field_links[contadorL] }}</li>
+                                                                {% set contador = contador + 1 %}
+                                                                {% set contadorL = contadorL + 1 %}
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                        {% set contadorR = 0 %}
+                                                        {% for key, item in content.group_anexos_fields.field_adj_foam_relacionados['#items'] %}
+                                                                {% if contador < 3 %}
+                                                                    <li class="pxc-link-foam-stand">{{ content.group_anexos_fields.field_adj_foam_relacionados[contadorR] }}</li>
+                                                                {% set contador = contador + 1 %}
+                                                                {% set contadorR = contadorR + 1 %}
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                        {% else %}
+                                            <div class="pxc-foam-enlaces-regular">
+                                            {{ content.group_anexos_fields.field_adj_documentos }}{{ content.group_anexos_fields.field_links }}{{ content.group_anexos_fields.field_adj_foam_relacionados }}
+                                        {% endif %}    
+                                        </div>
+                                    </div>
+                                    {% if enlacesFoam > 3 %}
+                                        {% if plantillaFoamSub1 == "1" %}
+                                            <div class="col-12">
+                                                <a href="/node/{{ pid }}?uienlaces=1" type="button" class="pxc-button-foam-enlaces pxc-foam-enlaces" >Todos los documentos, enlaces o anexos</a>
+                                            </div>                          
+                                        {% else %}
+                                            <div class="col-12">
+                                                <a id="pxc-button-foam-enlaces-{{ pid }}" type="button" class="pxc-button-foam-enlaces pxc-foam-enlaces" data-bs-toggle="modal" data-bs-target="#themeModal-comentarios" data-pxc-id="{{ pid }}">Todos los documentos, enlaces o anexos</a>
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>    
+                              </div>
+                          {% endif %}
+                    </div>
+            </div>
+        </div>
+  
+        {# A 3.4 Audio para todas las plantillas #}
+          {% if audioFoam > 0 %}
+            <div class="pxc-foam-audio">
+                <!-- Adjunto audio -->
+                {% if node.field_adj_audio is not empty %}
+                    {% if plantillaFoamSub1 == 1 %}
+                        <div class="slick-foam-audio">
+                            {% set contador = 0 %}
+                            {% for key, item in content.group_tarjeta.field_adj_audio['#items'] %}
+                                <div class="pxc-foam-media-item">
+                                    <audio controls preload="none">
+                                        {% set audioFile = content.group_tarjeta.field_adj_audio[contador]|render|raw %}
+                                        {% if 'mp4' in audioFile %}
+                                            <source src="{{ audioFile }}" type="audio/mp4">
+                                        {% elseif 'mp3' in audioFile %}
+                                            <source src="{{ audioFile }}" type="audio/mp3">
+                                        {% elseif 'webm' in audioFile %}
+                                            <source src="{{ audioFile }}" type="audio/webm">
+                                        {% else %}
+                                            <source src="{{ audioFile }}" type="audio/webm">
+                                        {% endif %}
+                                    </audio>
+                                </div>
+                                {% set contador = contador + 1 %}
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="noslick-foam-audio">
+                            {% set contador = 0 %}
+                            {% for key, item in content.group_tarjeta.field_adj_audio['#items'] %}
+                                {% if contador == 0 %}
+                                    <div class="pxc-foam-media-item">
+                                        <audio controls preload="none">
+                                            {% set audioFile = content.group_tarjeta.field_adj_audio[contador]|render|raw %}
+                                            {% if 'mp4' in audioFile %}
+                                                <source src="{{ audioFile }}" type="audio/mp4">
+                                            {% elseif 'mp3' in audioFile %}
+                                                <source src="{{ audioFile }}" type="audio/mp3">
+                                            {% elseif 'webm' in audioFile %}
+                                                <source src="{{ audioFile }}" type="audio/webm">
+                                            {% else %}
+                                                <source src="{{ audioFile }}" type="audio/webm">
+                                            {% endif %}
+                                        </audio>
+                                    </div>
+                                {% endif %}
+                                {% set contador = contador + 1 %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>    
+        {% endif %}     
+    {% else %}
+        {# Foam normal #}
+        {# B 3.1 opciones de edicion para plantilla 0 #}
+        {% if (plantillaFoam == 0 and node.getOwnerId() == curUsuId and plantillaFoamSub1 == "0") %}
+          <div class="pxc-foam-acciones">
+              <ul>
+                  <li><span class="pxc-foam-acciones-trigger">&#8942;</span>
+                    <ul>
+                        <li><a href="/node/{{ pid }}/edit">Editar</a></li>
+                        <li><a href="/node/{{ pid }}/delete">Eliminar</a></li>
+                    </ul>
+                  </li>
+              </ul>
+          </div>
+        {% endif %}
+  
+        {# B 3.2 Elementos de medios para todas las plantillas #}
+        {% if mediaFoam > 0 %}
+          <div class="pxc-foam-media">
+              {% if plantillaFoamSub1 == 1 %}
+                <div class="slick-foam-media">
+              {% else %}
+                 <div class="noslick-foam-media">
+              {% endif %}
+                  {% set contadorGral = 0 %}
+                  {% if plantillaFoamSub1 == "0" %}
+                    {% set limite = 1 %}
+                  {% else %}
+                    {% set limite = mediaFoam %}
+                  {% endif %}
+                  <!-- Adjunto videos -->
+                  {% if node.field_adj_videos is not empty %}
+                        {% set contador = 0 %}
+                        {% for key, item in content.group_tarjeta.field_adj_videos['#items'] %}
+                            {% if contadorGral < limite %}
+                                <div class="pxc-foam-media-item">
+                                    {{ content.group_tarjeta.field_adj_videos[contador] }}
+                                </div>
+                                {% set contador = contador + 1 %}
+                            {% endif %}
+                            {% set contadorGral = contadorGral + 1 %}
+                        {% endfor %}
+                  {% endif %}
+                  <!-- Adjunto videos remotos -->
+                  {% if node.field_adj_videos_remotos is not empty and contadorGral < limite %}
+                        {% set contador = 0 %}
+                        {% for key, item in content.group_tarjeta.field_adj_videos_remotos['#items'] %}
+                            {% if contadorGral < limite %}
+                                <div class="pxc-foam-media-item">
+                                    {{ content.group_tarjeta.field_adj_videos_remotos[contador] }}
+                                </div>
+                                {% set contador = contador + 1 %}
+                            {% endif %}
+                            {% set contadorGral = contadorGral + 1 %}
+                        {% endfor %}
+                  {% endif %}
+                  <!-- Adjunto imagenes -->
+                  {% if node.field_adj_imagenes is not empty and contadorGral < limite %}
+                        {% set contador = 0 %}
+                        {% for key, item in content.group_tarjeta.field_adj_imagenes['#items'] %}
+                            {% if contadorGral < limite %}
+                                <div class="pxc-foam-media-item">
+                                    {{ content.group_tarjeta.field_adj_imagenes[contador] }}
+                                </div>
+                                {% set contador = contador + 1 %}
+                            {% endif %}
+                            {% set contadorGral = contadorGral + 1 %}
+                        {% endfor %}
+                  {% endif %}
+              </div>
+          </div>
+          {% if (mediaFoam > 1 or audioFoam > 1) and plantillaFoamSub1 == "0" %}
+                <div class="pxc-goto-details">
+                    <a id="pxc-button-foam-details-{{ pid }}" type="button" class="pxc-button-foam-details pxc-foam-details" data-bs-toggle="modal" data-bs-target="#themeModal-comentarios" data-pxc-id="{{ pid }}">Ver completo</a>
+                </div>
+          {% endif %}
+        {% endif %}  
+
+        {# B 3.2 Informaci√≥n de la fecha y el autor para todas las plantillas #}
+        {% if display_submitted %}
+            <div class="pxc-foam-autor">
+              <div{{ author_attributes }}>
+                <div class="row">
+                    <div class="col-auto">{{ author_picture }}</div>
+                    <div class="col">
+                        <span class="pxc-name-autor">{{ author_name }}</span><br>
+                        <span class="pxc-fecha-autor"><small>{{ pre_created }}{{ created }}</small></span>
+                    </div>
+                </div>
+              </div>
+            </div>
+        {% endif %}
+  
+        {# B 3.3 Cuerpo del texto para todas las plantillas #}
+        {% if node.body is not empty %}
+            {% set body_largo = node.body.value|striptags %}
+            {% if body_largo >= 400 %}
+            <div class="pxc-foam-body pxc-foam-body-l">
+                <div class="pxc-foam-body-largo">
+            {% else %}
+            <div class="pxc-foam-body">  
+                <div class="pxc-foam-body-regular">
+            {% endif %}
+             {{ content.group_tarjeta.body }}
+                </div>
+            </div>
+        {% endif %}
+  
+        {# B 3.4 Audio para todas las plantillas #}
+          {% if audioFoam > 0 %}
+            <div class="pxc-foam-audio">
+                <!-- Adjunto audio -->
+                {% if node.field_adj_audio is not empty %}
+                    {% if plantillaFoamSub1 == 1 %}
+                        <div class="slick-foam-audio">
+                            {% set contador = 0 %}
+                            {% for key, item in content.group_tarjeta.field_adj_audio['#items'] %}
+                                <div class="pxc-foam-media-item">
+                                    <audio controls preload="none">
+                                        {% set audioFile = content.group_tarjeta.field_adj_audio[contador]|render|raw %}
+                                        {% if 'mp4' in audioFile %}
+                                            <source src="{{ audioFile }}" type="audio/mp4">
+                                        {% elseif 'mp3' in audioFile %}
+                                            <source src="{{ audioFile }}" type="audio/mp3">
+                                        {% elseif 'webm' in audioFile %}
+                                            <source src="{{ audioFile }}" type="audio/webm">
+                                        {% else %}
+                                            <source src="{{ audioFile }}" type="audio/webm">
+                                        {% endif %}
+                                    </audio>
+                                </div>
+                                {% set contador = contador + 1 %}
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="noslick-foam-audio">
+                            {% set contador = 0 %}
+                            {% for key, item in content.group_tarjeta.field_adj_audio['#items'] %}
+                                {% if contador == 0 %}
+                                    <div class="pxc-foam-media-item">
+                                        <audio controls preload="none">
+                                            {% set audioFile = content.group_tarjeta.field_adj_audio[contador]|render|raw %}
+                                            {% if 'mp4' in audioFile %}
+                                                <source src="{{ audioFile }}" type="audio/mp4">
+                                            {% elseif 'mp3' in audioFile %}
+                                                <source src="{{ audioFile }}" type="audio/mp3">
+                                            {% elseif 'webm' in audioFile %}
+                                                <source src="{{ audioFile }}" type="audio/webm">
+                                            {% else %}
+                                                <source src="{{ audioFile }}" type="audio/webm">
+                                            {% endif %}
+                                        </audio>
+                                    </div>
+                                {% endif %}
+                                {% set contador = contador + 1 %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>    
+        {% endif %}  
+    {% endif %}      
+        
+  {# 3.x Formato #}
+  {% if plantillaFoam == 1 or plantillaFoam == 4 %}
+    </div><div class="col-8">
+  {% endif %}        
+  
+        {# 3.5 Complementos para la plantilla 1 de comentarios #}
+        {% if plantillaFoam == 1 %}
+            <div class="pxc-foam-extras-comentarios">
+                <div class="pxc-foam-extras-comentarios-titulo">
+                    {{ comentariosFoam }} {% if comentariosFoam > 1 %}Comentarios{% else %}Comentario{% endif %}
+                </div>
+                <div class="pxc-foam-extras-comentarios-yo">
+                    <div class="row">
+                        <div class="col-auto" id="pxc-yo"></div>
+                        <div class="col">
+                            <span class="pxc-name-autor-yo">Yo</span>
+                        </div>
+                    </div>
+                </div>
+                {{ content.group_comentarios }}
+            </div>
+        {% endif %}
+        
+        {# 3.6 Complementos para la plantilla 4 de adjuntos #}
+        {% if plantillaFoam == 4 %}
+            <div class="pxc-foam-extras-adjuntos">
+                <div class="pxc-foam-extras-adjuntos-titulo">
+                    {% if enlacesFoam == 1 %}
+                        <span class="pxc-foam-card-titulo">{{ enlacesFoam }} Documento, enlace o anexo.</span>
+                        {% else %}
+                        <span class="pxc-foam-card-titulo">{{ enlacesFoam }} Documentos, enlaces o anexos.</span>
+                    {% endif %}
+                </div>
+                {{ content.group_anexos_fields.field_adj_documentos }}{{ content.group_anexos_fields.field_links }}{{ content.group_anexos_fields.field_adj_foam_relacionados }}
+            </div>
+        {% endif %}
+        
+        {# 3.7 Complementos para la plantilla 5 de temas #}
+        {% if plantillaFoam == 5 %}
+            <div class="pxc-foam-extras-tags">
+                {% set contador = 0 %}
+                {% for key, item in content.group_tag_fields.field_folksonomy['#items'] %}
+                    <span class="pxc-tema pxc-folksonomy-item" data-id="{{ item.entity.id }}">{{ content.group_tag_fields.field_folksonomy[contador] }}
+                    </span>
+                    {% set contador = contador + 1 %}
+                {% endfor %} 
+                {% set contador = 0 %}
+                {% for key, item in content.group_tag_fields.field_temas_contribuidos['#items'] %}
+                    <span class="pxc-tema pxc-tema-contribuido-item" data-id="{{ item.entity.id }}">{{ content.group_tag_fields.field_temas_contribuidos[contador] }}
+                    </span>
+                    {% set contador = contador + 1 %}
+                {% endfor %} 
+            </div>
+        {% endif %}
+        
+        {# 3.8 Complementos para la plantilla 0 #}
+        {% if plantillaFoam == 0 %}
+              <!-- Enlaces Foam -->
+              {% if enlacesFoam > 0 and tipoFoam != "1" %}
+                  <div class="pxc-foam-enlaces">
+                    <div class="row">
+                        <div class="col-12">
+                            {% if enlacesFoam == 1 %}
+                                <span class="pxc-foam-card-titulo">{{ enlacesFoam }} Documento, enlace o anexo.</span>
+                            {% else %}
+                                <span class="pxc-foam-card-titulo">{{ enlacesFoam }} Documentos, enlaces o anexos.</span>
+                            {% endif %}
+                        </div>
+                        <div class="col-12">
+                            {% if enlacesFoam > 3 %}
+                                <div class="pxc-foam-enlaces-largo">
+                                    {% set contador = 0 %}
+                                    <div class="pxc-archivo">
+                                        <ul>
+                                            {% for key, item in content.group_anexos_fields.field_adj_documentos['#items'] %}
+                                                    {% if contador < 3 %}
+                                                        <li>{{ content.group_anexos_fields.field_adj_documentos[contador] }}
+                                                    {% set contador = contador + 1 %}</li>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    <div class="pxc-links-card">
+                                        <ul>{% set contadorL = 0 %}
+                                            {% for key, item in content.group_anexos_fields.field_links['#items'] %}
+                                                    {% if contador < 3 %}
+                                                        <li class="pxc-link-stand">{{ content.group_anexos_fields.field_links[contadorL] }}</li>
+                                                    {% set contador = contador + 1 %}
+                                                    {% set contadorL = contadorL + 1 %}
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% set contadorR = 0 %}
+                                            {% for key, item in content.group_anexos_fields.field_adj_foam_relacionados['#items'] %}
+                                                    {% if contador < 3 %}
+                                                        <li class="pxc-link-foam-stand">{{ content.group_anexos_fields.field_adj_foam_relacionados[contadorR] }}</li>
+                                                    {% set contador = contador + 1 %}
+                                                    {% set contadorR = contadorR + 1 %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                            {% else %}
+                                <div class="pxc-foam-enlaces-regular">
+                                {{ content.group_anexos_fields.field_adj_documentos }}{{ content.group_anexos_fields.field_links }}{{ content.group_anexos_fields.field_adj_foam_relacionados }}
+                            {% endif %}    
+                            </div>
+                        </div>
+                        {% if enlacesFoam > 3 %}
+                            {% if plantillaFoamSub1 == "1" %}
+                                <div class="col-12">
+                                    <a href="/node/{{ pid }}?uienlaces=1" type="button" class="pxc-button-foam-enlaces pxc-foam-enlaces" >Todos los documentos, enlaces o anexos</a>
+                                            </div>                          
+                            {% else %}
+                                <div class="col-12">
+                                    <a id="pxc-button-foam-enlaces-{{ pid }}" type="button" class="pxc-button-foam-enlaces pxc-foam-enlaces" data-bs-toggle="modal" data-bs-target="#themeModal-comentarios" data-pxc-id="{{ pid }}">Todos los documentos, enlaces o anexos</a>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    </div>    
+                  </div>
+              {% endif %}
+              <!-- Temas Foam -->
+              {% if temasFoam > 0 %}
+                  <div class="pxc-foam-temas">
+                    <div class="row">
+                        <div class="col-12"><span class="pxc-foam-card-titulo">Temas</span></div>
+                        <div class="col-12">
+                            <div class="pxc-foam-temas-lista">
+                                {% set contador = 0 %}
+                                {% for key, item in content.group_tag_fields.field_folksonomy['#items'] %}
+                                    {% if contador < 8 %}
+                                        <span class="pxc-folksonomy-item">{{ content.group_tag_fields.field_folksonomy[contador] }}</span>
+                                        {% set contador = contador + 1 %}
+                                    {% endif %}
+                                {% endfor %} 
+                                {% set contador = 0 %}
+                                {% for key, item in content.group_tag_fields.field_temas_contribuidos['#items'] %}
+                                    {% if contador < 8 %}
+                                        <span class="pxc-tema-contribuido-item">{{ content.group_tag_fields.field_temas_contribuidos[contador] }}</span>
+                                        {% set contador = contador + 1 %}
+                                    {% endif %}
+                                {% endfor %}
+                                {% if temasFoam >= 8 %}
+                                    <span class="pxc-foam-temas-mas">...</span>
+                                {% endif %}
+                                {% if plantillaFoamSub1 == "1" %}
+                                    <a href="/tagging?nid={{ pid }}&tagging=1" type="button" class="pxc-button-foam-temas pxc-foam-temas-boton">+</a>  
+                                {% else %}
+                                    <a id="pxc-button-foam-temas-{{ pid }}" type="button" class="pxc-button-foam-temas pxc-foam-temas-boton" data-bs-toggle="modal" data-bs-target="#themeModal-comentarios" data-pxc-id="{{ pid }}">+</a>
+                                {% endif %}    
+                            </div>
+                        </div>
+                    </div>    
+                  </div>
+              {% endif %}
+              <!-- Social Foam -->
+              <div class="pxc-foam-social">
+                  <div class="row justify-content-between">
+                    <div class="col-6">
+                        {% if comentariosFoam >= 0 %}
+                            {% if plantillaFoamSub1 == "1" %}
+                                <a href="/node/{{ pid }}?uicomments=1" type="button" class="pxc-foam-social-boton pxc-foam-social-boton-comentarios">{{ comentariosFoam }} {% if comentariosFoam > 1 %}Comentarios{% else %}Comentario{% endif %}</a>
+                            {% else %}
+                                <a id="pxc-button-foam-comments-{{ pid }}" type="button" class="pxc-foam-social-boton pxc-foam-social-boton-comentarios pxc-button-foam-comments" data-bs-toggle="modal" data-bs-target="#themeModal-comentarios" data-pxc-id="{{ pid }}">{{ comentariosFoam }} {% if comentariosFoam > 1 %}Comentarios{% else %}Comentario{% endif %}</a>
+                            {% endif %}    
+                        {% endif %}
+                    </div>
+                    <div class="col-6">
+                        {% set favoritos = 0 %}
+                        {% set contador = 0 %}
+                            {% for key, item in content.group_tarjeta.field_seguidores['#items'] %}
+                                {% if node.field_seguidores[contador].entity.uid.value == user.id %}
+                                    {% set favoritos = 1 %}
+                                {% endif %}
+                                {% set contador = contador + 1 %}
+                            {% endfor %}
+                            {% if favoritos == 1 %}
+                                <div class="pxc-foam-favoritos pxc-foam-favorito-activo" data-foam-id="{{ pid }}">
+                                    <span class="pxc-foam-favoritos-icono pxc-foam-favoritos-icono-activo">V</span> <span class="pxc-foam-favoritos-texto">Favorito</span></div>
+                                </div>
+                            {% else %}
+                                <div class="pxc-foam-favoritos pxc-foam-favoritos-boton" data-foam-id="{{ pid }}">
+                                    <span class="pxc-foam-favoritos-icono">V</span> <span class="pxc-foam-favoritos-texto">Marcar como favorito</span></div>
+                                </div>    
+                            {% endif %}
+                            
+                  </div>
+              </div>
+        {% endif %}  
+        
+        
+  {# 3.x Formato #}
+  {% if plantillaFoam == 0 %}
+    </div></div></div>
+  {% else %}
+    </div></div></div> 
+  {% endif %}
+
+</article>
+

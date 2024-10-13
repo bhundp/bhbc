@@ -1,0 +1,5 @@
+name: 'Pixel Azure OpenAI'
+type: module
+description: 'Add components to interact with Azure OpenAI.'
+core_version_requirement: ^9 || ^10
+package: Custom

@@ -1,0 +1,111 @@
+// Librería de funcionalidades del Tagging
+
+
+// PART 1. JQuery
+(function($) {
+$(document).ready(function () {
+    
+    $( "#pxc-bolita-add" ).on( "click", function() {
+        // Consulta cuáles Ids existen en el diagrama
+        var ids = nodes.getIds();
+        console.log('ids', ids);
+        
+        // Añade nodos
+        nodes.add([
+          { id: 6, label: "Node 6" },
+          { id: 7, label: "Node 7" }
+        ]);
+        
+        // Remueve nodos
+        nodes.remove(4);
+        
+        // Actualiza nodos
+        nodes.updateOnly({id: 2, label: "Nodo segundo"});
+        
+        // Añade conexiones
+        edges.add([
+            { from: 1, to: 6 },
+            { from: 1, to: 7 },
+        ]);
+    });
+    
+    
+
+// End of Part 1
+});
+})(jQuery); 
+
+      // Parte 1, Vis network
+      // Carga del diagrama
+
+      // Carga los datos iniciales
+      // create an array with nodes
+      var nodes = new vis.DataSet([
+        { id: 1, label: "Node 1" },
+        { id: 2, label: "Node 2", color: "#FFFF00", font: "16px m-semibold #ff0000"},
+        { id: 3, label: "Node 3" },
+        { id: 4, label: "Node 4" },
+        { id: 5, label: "Node 5" },
+      ]);
+
+      // create an array with edges
+      var edges = new vis.DataSet([
+        { from: 1, to: 3 },
+        { from: 1, to: 2 },
+        { from: 2, to: 4 },
+        { from: 2, to: 5 },
+      ]);
+
+      // create a network
+      var container = document.getElementById("pxc-bolitas");
+      var data = {
+        nodes: nodes,
+        edges: edges,
+      };
+      // Aquí se pueden definir settings generales para todas las bolitas
+      var options = {
+          nodes: {
+            shape: "circle",
+            borderWidth : 0 ,
+            shadow: true,
+            margin: 15,
+            font: "14px m-book #000",
+          },
+          interaction: { hover: true }
+        };
+      var network = new vis.Network(container, data, options);
+      
+      // Parte 2, Vis eventos sobre el diagrama
+      // Evento de seleccionar (con click)
+      network.on("selectNode", function (params) {
+        console.log("selectNode Event:", params['nodes'][0]);
+        if(params['nodes'][0] == 2) {
+            accionVis();
+        }
+      });
+      
+      // Evento de hover (hover)
+      network.on("hoverNode", function (params) {
+        console.log("hoverNode Event:", params['node']);
+      });
+      
+      network.on("zoom", function (params) {
+         console.log("hoverNode Event:", params);
+      }); 
+    
+      
+      
+      // Parte 3, Vis funciones
+      function accionVis() {
+        nodes.add([
+          { id: 8, label: "Node 8" },
+          { id: 9, label: "Node 9" }
+        ]);
+        edges.add([
+            { from: 2, to: 8 },
+            { from: 2, to: 9 },
+        ]);
+      }
+      
+      
+    

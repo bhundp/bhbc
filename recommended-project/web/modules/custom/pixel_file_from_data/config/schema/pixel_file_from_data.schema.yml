@@ -1,0 +1,7 @@
+field.field_settings.media_type:
+  type: mapping
+  label: 'Media type'
+  mapping:
+    media_type:
+      type: string
+      label: 'Media type'

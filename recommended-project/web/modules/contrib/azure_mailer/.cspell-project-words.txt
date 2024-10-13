@@ -1,0 +1,4 @@
+mailsystem
+yoursecret
+yoursite
+Mobomo

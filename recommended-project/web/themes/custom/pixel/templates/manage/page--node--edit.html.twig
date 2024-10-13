@@ -1,0 +1,260 @@
+{% set tipo = node.getType %}
+{% if tipo == "foam" %}
+    {{ attach_library('pixel/pxc-content-management') }} 
+    {{ attach_library('pixel/pxc-map-relationships') }}
+    {{ attach_library('pixel/pxc-tagging-edit') }}
+{% endif %}
+<!-- Header -->
+<header class="pxc-top-header" id="header">
+  <div class="pxc-top-header-container">
+    {% if page.super %}
+		<div id="pxc-top-header-super">
+    	    {{ page.super }}
+		</div>
+	{% endif %}  
+	{% if page.top %}
+		<div id="pxc-top-header">
+		    {{ page.top }}
+		</div>
+	{% endif %}
+	<div class="pxc-nav-1">
+	    <div class="container-fluid">
+            <div class="row">
+                <div class="pxc-color-1 col-2"> 
+                    <div id="logo-header" class="pxc-branding">{{ page.branding }}</div>
+                </div>
+                <div class="pxc-color-3 col-8">
+                    <div class="container-xxl">
+                            {% if page.header %}
+		                        <div id="pxc-header">
+                                    {{ page.header }}
+	                            </div>
+	                        {% endif %}
+                    </div>                    
+                </div>
+                <div class="pxc-color-2 col-2">
+                    <div class="pxc-main-menu">
+                        <div class="row">
+                            <div class="col">
+                                {{ page.fila_menu }}
+                            </div>
+                            <div class="col">
+                                <div class="pxc-main-menu-lista">
+                                        {% if page.fila_menu_usuario_2 %}
+                                            <div class="pxc-micro-perfil-pic">
+                                                {{ page.fila_menu_usuario_2 }}
+                                            </div>
+                                        {% endif %}
+                                        {% if logged_in %}
+                                            {{ page.fila_menu_usuario }}
+                                        {% endif %}
+                                </div>
+                                <button id="pxc-main-menu-boton" class="pxc-main-menu-boton" type="button" aria-controls="pxc-lateral" aria-expanded="false" aria-label="Ver navegaci&oacute;n" onclick="openNav()"><span class="pxc-main-menu-boton-icono"></span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </div>
+    <div class="pxc-nav-2" id="pxc-menu-principal-theme">
+      {% if page.fila_menudown %}
+        <div class="container-xxl pxc-menu-principal-theme-down">
+            <div class="collapse" id="pxc-menu-principal-theme-down-collapse">
+                {{ page.fila_menudown }}
+            </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</header>
+<!-- Fin header --> 
+<!-- Cuerpo --> 
+{% if page.lateral %}
+<div id="pxc-lateral" class="pxc-lateral">
+    <div class="pxc-fantasma"></div>
+    <button id="pxc-lateral-boton" class="pxc-lateral-boton" type="button" aria-controls="pxc-lateral" aria-expanded="false" aria-label="Cerrar navegaci&oacute;n" onclick="closeNav()"> <span class="pxc-lateral-boton-icono"></span> </button>
+	{{ page.lateral }}
+</div>
+{% endif %}
+<section id="pxc-main-content" class="pxc-edit-form-foam">
+	{% if page.pre_content %}
+	<div id="pxc-pre-content">
+		{{ page.pre_content }}
+	</div>{% endif %}
+	{% if page.fila_0 %}
+	<div id="pxc-fila0">
+		{{ page.fila_0 }}
+	</div>{% endif %}
+	{% if page.fila_0a %}
+	<div id="pxc-fila0a">
+		{{ page.fila_0a }}
+	</div>{% endif %}
+	{% if page.fila_1 %}
+	<div id="pxc-fila1">
+		{{ page.fila_1 }}
+	</div>{% endif %}
+	{% if page.fila_1a %}
+	<div id="pxc-fila1a">
+		{{ page.fila_1a }}
+	</div>{% endif %}
+	{% if not is_front %}
+	{% if page.content %}
+		<div id="pxc-main" class="container-xxl" data-pxc-cur-id="{{ nodeId }}">
+			<div class="row">
+				{% if page.sidebar %}
+					{% if page.inverter %}
+						<div class="col-md-12 col-lg-9 pxc-main-content pxc-main-col-1">
+							<a id="main-content" tabindex="-1"></a>
+							{{ page.content }}
+						</div>
+						<aside class="layout-sidebar col-md-12 col-lg-3 pxc-main-col-2">
+							{{ page.sidebar }}
+						</aside>
+					{% else %}
+						<aside class="layout-sidebar col-lg-3 pxc-main-col-2-1">
+							{{ page.sidebar }}
+						</aside>
+						<div class="col-lg-9 pxc-main-content pxc-main-col-1-1">
+							<a id="main-content" tabindex="-1"></a>
+							{{ page.content }}
+						</div>
+					{% endif %}
+				{% else %}
+					<div class="col-md-12 pxc-main-content pxc-main-col-0 pxc-foam-editor-form">
+						<a id="main-content" tabindex="-1"></a>
+						{{ page.content }}
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	{% endif %}{% endif %}{% if page.fila_2 %}
+	<div id="pxc-fila2">
+		{{ page.fila_2 }}
+	</div>{% endif %}
+	{% if page.fila_2a %}
+	<div id="pxc-fila2a">
+		{{ page.fila_2a }}
+	</div>{% endif %}
+	{% if page.fila_3 %}
+	<div id="pxc-fila3">
+		{{ page.fila_3 }}
+	</div>{% endif %}
+</section>
+
+{% if page.modal %}
+<!-- Modal -->
+<div class="modal fade" id="themeModal" tabindex="-1" aria-labelledby="themeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="themeModalLabel"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {{ page.modal }}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+<!-- Fin cuerpo -->
+
+
+{% if page.modal1 %}
+<!-- Modal -->
+<div class="modal fade" id="themeModal1" tabindex="-1" aria-labelledby="themeModalLabel1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="themeModalLabel1"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {{ page.modal1 }}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+<!-- Fin cuerpo -->
+
+{% if page.modal2 %}
+<!-- Modal -->
+<div class="modal fade" id="themeModal2" tabindex="-1" aria-labelledby="themeModalLabel2" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="themeModalLabel2"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {{ page.modal2 }}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+<!-- Fin cuerpo -->
+
+
+{% if page.modal_comentarios %}
+<!-- Modal -->
+<div class="modal fade" id="themeModal-comentarios" tabindex="-1" aria-labelledby="themeModalLabel-comentarios" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="themeModalLabel-comentarios">Comentarios</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body pxc-foam-editor-form-modal">
+        {{ page.modal_comentarios }}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+<!-- Fin cuerpo -->
+
+
+
+<!-- Footer-->
+<footer class="pxc-footer">
+  <div class="container-xxl">
+    <div class="row">
+      <div class="col-sm-6 col-lg-3 pxc-footer-col-1">
+        {{ page.footerizq }}
+      </div>
+      <div class="col-sm-6 col-lg-3 pxc-footer-col-2">
+        {{ page.footerizq2 }}
+      </div>
+      <div class="col-sm-6 col-lg-3 pxc-footer-col-3">
+        {{ page.footer }}
+      </div>
+      <div class="col-sm-6 col-lg-3 pxc-footer-col-4">
+        {{ page.footerder }}
+      </div>
+    </div>
+  </div>
+</footer>
+<div class="pxc-copyright">
+  <div class="container-xxl">
+    <div class="row">
+      <div class="col-sm-6 col-lg-4 pxc-copyright-col-1">
+      </div>
+      <div class="col-sm-12 col-lg-4 pxc-copyright-col-2">
+        {{ page.posfooter }}
+      </div>
+      <div class="col-sm-6 col-lg-4 pxc-copyright-col-3">
+      </div>
+    </div>
+  </div>
+</div>
+{% if page.abs_footer %}
+<div id="pxc-absolute-footer">
+	{{ page.abs_footer }}
+</div>{% endif %}
+{% if page.abs_footer_1 %}
+<div id="pxc-absolute-footer-1">
+	{{ page.abs_footer_1 }}
+</div>{% endif %}

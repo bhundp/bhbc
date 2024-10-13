@@ -1,0 +1,17 @@
+{{ attach_library('pixel/pxc-comments') }}
+{{ attach_library('pixel/over-styling') }}
+    <!-- Cuerpo --> 
+    {% if page.content %}
+        <section id="pxc-main-content" class="pxc-reply-main-content">
+        	 <div id="pxc-main" class="container-xxl">
+        	     <div class="row">
+        	         <div class="col-12">
+        	            {{ page.content }}
+        	        </div>
+        	 </div>
+        </section>	 
+    {% endif %}
+
+
+
+

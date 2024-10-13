@@ -1,0 +1,7 @@
+name: 'ECA Pixel File from data'
+type: module
+description: 'Content entity events, conditions and actions.'
+core_version_requirement: ^9 || ^10
+package: Custom
+dependencies:
+  - eca:eca

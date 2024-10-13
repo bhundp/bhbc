@@ -1,0 +1,721 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a node.
+ *
+ * Available variables:
+ * - node: The node entity with limited access to object properties and methods.
+ *   Only method names starting with "get", "has", or "is" and a few common
+ *   methods such as "id", "label", and "bundle" are available. For example:
+ *   - node.getCreatedTime() will return the node creation timestamp.
+ *   - node.hasField('field_example') returns TRUE if the node bundle includes
+ *     field_example. (This does not indicate the presence of a value in this
+ *     field.)
+ *   - node.isPublished() will return whether the node is published or not.
+ *   Calling other methods, such as node.delete(), will result in an exception.
+ *   See \Drupal\node\Entity\Node for a full list of public properties and
+ *   methods for the node object.
+ * - label: (optional) The title of the node.
+ * - content: All node items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - author_picture: The node author user entity, rendered using the "compact"
+ *   view mode.
+ * - metadata: Metadata for this node.
+ * - date: (optional) Themed creation date field.
+ * - author_name: (optional) Themed author name field.
+ * - url: Direct URL of the current node.
+ * - display_submitted: Whether submission information should be displayed.
+ * - attributes: HTML attributes for the containing element.
+ *   The attributes.class element may contain one or more of the following
+ *   classes:
+ *   - node: The current template type (also known as a "theming hook").
+ *   - node--type-[type]: The current node type. For example, if the node is an
+ *     "Article" it would result in "node--type-article". Note that the machine
+ *     name will often be in a short form of the human readable label.
+ *   - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+ *     teaser would result in: "node--view-mode-teaser", and
+ *     full: "node--view-mode-full".
+ *   The following are controlled through the node publishing options.
+ *   - node--promoted: Appears on nodes promoted to the front page.
+ *   - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+ *     teaser listings.
+ *   - node--unpublished: Appears on unpublished nodes visible only to site
+ *     admins.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - content_attributes: Same as attributes, except applied to the main
+ *   content tag that appears in the template.
+ * - author_attributes: Same as attributes, except applied to the author of
+ *   the node tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ * - view_mode: View mode; for example, "teaser" or "full".
+ * - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+ * - page: Flag for the full page state. Will be true if view_mode is 'full'.
+ * - readmore: Flag for more state. Will be true if the teaser content of the
+ *   node cannot hold the main body content.
+ * - logged_in: Flag for authenticated user status. Will be true when the
+ *   current user is a logged-in member.
+ * - is_admin: Flag for admin user status. Will be true when the current user
+ *   is an administrator.
+ *
+ * @see template_preprocess_node()
+ *
+ * @todo Remove the id attribute (or make it a class), because if that gets
+ *   rendered twice on a page this is invalid CSS for example: two lists
+ *   in different view modes.
+ *
+ * @ingroup themeable
+ */
+#}
+
+
+{# 0. Estilos generales #}
+{% set estilog = "" %}
+{% set clasesg = "pxc-bloque " %}
+{% set clasese = "pxc-bloque-bloques-asociados " %}
+{% if node.field_imagen_de_fondo is not empty %}
+	{% set estilog = " background-image:url('"~ file_url(node.field_imagen_de_fondo.entity.field_media_image.entity.fileuri) ~"');" %}
+{% endif %}
+{% if node.field_color_del_fondo is not empty %}
+	{% set estilog = estilog ~ " background-color:"~ node.field_color_del_fondo.value ~";" %}
+{% endif %}
+{% if node.field_clases_basicas is not empty %}
+	{% set clasesg = node.field_clases_basicas.value %}
+{% endif %}
+{% set pid = node.nid.value %}
+{% set titulo = node.title.value %}
+
+<div class="{{ clasesg }} pxc-bloque-{{ node.nid.value }}" style="{{ estilog }}">
+
+	{# 1. Contenido básico del bloque #}
+	{% if node.field_imagen is not empty %}
+		<div class="pxc-bloque-imagen-main">
+		    {% if node.field_imagen is not empty %}
+	            {% set imagen_l = file_url(node.field_imagen.entity.field_media_image.entity.fileuri) %}
+            {% endif %}
+            {% if node.field_imagen_mobile is not empty %}
+        	    {% set imagen_s = file_url(node.field_imagen_mobile.entity.field_media_image.entity.fileuri) %}
+            {% endif %}
+            {% if node.field_imagen_mobile is not empty %}
+        	    {% set imagen_s = file_url(node.field_imagen_mobile.entity.field_media_image.entity.fileuri) %}
+            {% endif %}
+		    {% set picture = '<picture><source srcset="' ~ imagen_l ~ '" media="(min-width: 1025px)"><source srcset="' ~ imagen_s ~ '" media="(min-width: 768px)"><source srcset="' ~ imagen_s ~ '" media="(min-width: 100px)"><img src="' ~ imagen_l ~ '" class="img-fluid" alt="' ~ titulo ~ '"></picture>' %}
+                {{ picture|raw }}
+		</div>
+	{% endif %}
+	
+	<div class="pxc-bloque-body">{{ content.body }}</div>
+	
+	{% if node.field_links is not empty %}
+	    <div class="pxc-link">
+		    <div class="pxc-bloque-links">{{ content.field_links }}</div>
+		</div>
+	{% endif %}
+	
+	{% if node.field_anexos is not empty %}
+		<div class="pxc-bloque-anexos-1">{{ content.field_anexos }}</div>
+	{% endif %}
+	
+	{% if node.field_documentos_relacionados is not empty %}
+		<div class="pxc-bloque-anexos-relacionados">{{ content.field_documentos_relacionados }}</div>
+	{% endif %}
+
+	{# 2. Contenido extra del bloque #}
+	{# 2.1 Carrusel de videos #}
+	{% if node.field_videos is not empty %}
+		<div class="pxc-bloque-videos">
+            <div id="pxc-bloque-videos-carousel-{{ node.nid.value }}" class="carousel slide pxc-bs-carrusel pxc-bs-carrusel-galeria-videos">
+              <div class="carousel-inner">
+                  {% set contador = 0 %}
+                    {% for key, item in content.field_videos %}
+                    {% if key|first != '#' %}
+                        {% if contador == 0 %}
+                            <div class="carousel-item active">
+                                {{ content.field_videos[contador] }}
+                            </div>
+                        {% else %}
+                            <div class="carousel-item">
+                                {{ content.field_videos[contador] }}
+                            </div>
+                        {% endif %}
+                        {% set contador = contador + 1 %}
+                    {% endif %}
+                    {% endfor %}
+              </div>
+			  {% if node.field_videos|length > 0 %}
+				  <button class="carousel-control-prev" type="button" data-bs-target="#pxc-bloque-videos-carousel-{{ node.nid.value }}" data-bs-slide="prev">
+					<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+					<span class="sr-only">Previous</span>
+				  </button>
+				  <button class="carousel-control-next" type="button" data-bs-target="#pxc-bloque-videos-carousel-{{ node.nid.value }}" data-bs-slide="next">
+					<span class="carousel-control-next-icon" aria-hidden="true"></span>
+					<span class="sr-only">Next</span>
+				  </button>
+			  {% endif %}
+            </div>		
+		</div>
+	{% endif %}
+	
+	{# 2.2 Carrusel de audios #}
+	{% if node.field_audios is not empty %}
+		<div class="pxc-bloque-audios">
+            <div id="pxc-bloque-audios-carousel-{{ node.nid.value }}" class="carousel slide pxc-bs-carrusel pxc-bs-carrusel-galeria-audios">
+              <div class="carousel-inner">
+                  {% set contador = 0 %}
+                    {% for key, item in content.field_audios %}
+                    {% if key|first != '#' %}
+                        {% if contador == 0 %}
+                            <div class="carousel-item active">
+                                {{ content.field_audios[contador] }}
+                            </div>
+                        {% else %}
+                            <div class="carousel-item">
+                                {{ content.field_audios[contador] }}
+                            </div>
+                        {% endif %}
+                        {% set contador = contador + 1 %}
+                    {% endif %}
+                    {% endfor %}
+              </div>
+			  {% if node.field_audios|length > 0 %}
+				  <button class="carousel-control-prev" type="button" data-bs-target="#pxc-bloque-audios-carousel-{{ node.nid.value }}" data-bs-slide="prev">
+					<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+					<span class="sr-only">Previous</span>
+				  </button>
+				  <button class="carousel-control-next" type="button" data-bs-target="#pxc-bloque-audios-carousel-{{ node.nid.value }}" data-bs-slide="next">
+					<span class="carousel-control-next-icon" aria-hidden="true"></span>
+					<span class="sr-only">Next</span>
+				  </button>
+			  {% endif %}
+            </div>		
+		</div>
+	{% endif %}
+	
+	{# 2.3 Galería de imágenes #}
+	{% if node.field_imagenes_de_apoyo is not empty %}
+		<div class="pxc-bloque-fotos-de-apoyo">
+			<div class="pxc-ss-carrusel pxc-ss-carrusel-responsive">
+                {{ content.field_imagenes_de_apoyo }}
+            </div>
+		</div>
+	{% endif %}
+	
+	{# 2.4 Embebido #}
+	{% if node.field_url is not empty %}
+		<div class="pxc-bloque-embebible">
+			<iframe  title="Embebible:{{ node.title.value }}" src="{{ node.field_url.value }}" class="pxc-bloque-embebible-iframe"></iframe>
+		</div>
+	{% endif %}
+
+
+	{# 3. Contenido anidado del bloque #}
+	{# Estilos del espacio de anidados del bloque #}
+	{% if node.field_clases_extra is not empty %}
+		{% set clasese = node.field_clases_extra.value %}
+	{% endif %}
+	{% if node.field_bloques_asociados is not empty %}
+		{# Formato de presentación de los bloques: 0 Normal, 1 Acordeón, 2 Carrusel, 3 Pestaña #}
+		{% set formato_extras = node.field_presentacion_de_los_bloque.value %}  
+		{% if formato_extras == 4 %}
+			<div class="pxc-bloque-bloques-asociados">
+		{% else %}
+			<div class="pxc-bloque-bloques-asociados {{ clasese }}">
+		{% endif %}
+			{% if formato_extras == 0 %}
+				{# Plano #}
+				{{ content.field_bloques_asociados }}
+			{% elseif formato_extras == 1 %}
+				
+				{# Acordeón #}
+				<div class="accordion pxc-acordeon" id="accordion-{{ node.nid.value }}">
+				{% set contador = 1 %}
+				{% for key, item in content.field_bloques_asociados %}
+				{% if key|first != '#' %}
+					{% set bloque_id = node.field_bloques_asociados[key].entity.nid.value %}
+                	{# set bloque_titulo = node.field_bloques_asociados[key].entity.field_titulo_visible.value #}
+					{% if node.field_bloques_asociados[key].entity.hastranslation(lang_code) %}
+						{% set bloque_titulo = node.field_bloques_asociados[key].entity.translation(lang_code).field_titulo_visible.value %}
+					{% else %}
+						{% set bloque_titulo = node.field_bloques_asociados[key].entity.field_titulo_visible.value %}
+					{% endif %}
+					<div class="accordion-item">
+					<h2 class="accordion-header" id="heading-{{ node.nid.value }}-{{ bloque_id }}">
+					  {% if key == 0 %}
+					  	<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ node.nid.value }}-{{ bloque_id }}" aria-expanded="true" aria-controls="collapse-{{ node.nid.value }}-{{ bloque_id }}">
+					  {% else %}
+					  	<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ node.nid.value }}-{{ bloque_id }}" aria-expanded="false" aria-controls="collapse-{{ node.nid.value }}-{{ bloque_id }}">
+					  {% endif %}
+						<span class="pxc-acordion-contador">{{ contador }}</span> {{ bloque_titulo }}
+					  </button>
+					  {% if node.field_bloques_asociados[key].entity.field_texto_extra is not empty %}{% if node.field_bloques_asociados[key].entity.hastranslation(lang_code) %}<span class="pxc-sub-descripcion">{{ node.field_bloques_asociados[key].entity.translation(lang_code).field_texto_extra.value|raw|striptags('<br><a>') }}</span>
+						{% else %}<span class="pxc-sub-descripcion">{{ node.field_bloques_asociados[key].entity.field_texto_extra.value|raw|striptags('<br><a>') }}</span>{% endif %}{% endif %}
+					</h2>
+					{% if key == 0 %}
+						<div id="collapse-{{ node.nid.value }}-{{ bloque_id }}" class="accordion-collapse collapse show" aria-labelledby="heading-{{ node.nid.value }}-{{ bloque_id }}" data-bs-parent="#accordion-{{ node.nid.value }}">
+					{% else %}
+						<div id="collapse-{{ node.nid.value }}-{{ bloque_id }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ node.nid.value }}-{{ bloque_id }}" data-bs-parent="#accordion-{{ node.nid.value }}">
+					{% endif %}
+					  <div class="accordion-body">
+						{{ item }}
+					  </div>
+					</div>
+				  </div>
+				  {% set contador = contador + 1 %}
+				  {% endif %}
+				{% endfor %}
+				</div>
+				
+			{% elseif formato_extras == 2 %}
+				
+				{# Carrusel #}
+				<div id="carouselExampleIndicators-{{ node.nid.value }}" class="carousel slide pxc-bs-carrusel">
+					<div class="carousel-indicators">
+					{% for key, item in content.field_bloques_asociados %}
+					{% if key|first != '#' %}
+						{% if key == 0 %}	
+							<button type="button" data-bs-target="#carouselExampleIndicators-{{ node.nid.value }}" data-bs-slide-to="{{ key }}" class="active" aria-current="true" aria-label="Slide {{ key }}"></button>
+						{% else %}
+							<button type="button" data-bs-target="#carouselExampleIndicators-{{ node.nid.value }}" data-bs-slide-to="{{ key }}" aria-label="Slide {{ key }}"></button>
+						{% endif %}
+					{% endif %}	
+					{% endfor %}
+					</div>
+					<div class="carousel-inner">
+					{% for key, item in content.field_bloques_asociados %}
+					{% if key|first != '#' %}
+						{% set bloque_id = node.field_bloques_asociados[key].entity.nid.value %}
+						{% if node.field_bloques_asociados[key].entity.hastranslation(lang_code) %}
+						{% set bloque_titulo = node.field_bloques_asociados[key].entity.translation(lang_code).field_titulo_visible.value %}
+    					{% else %}
+    						{% set bloque_titulo = node.field_bloques_asociados[key].entity.field_titulo_visible.value %}
+    					{% endif %}
+    						{% if key == 0 %}	
+    							<div class="carousel-item active">
+    								{{ item }}
+    							</div>
+    						{% else %}
+    							<div class="carousel-item">
+    								{{ item }}
+    							</div>
+    						{% endif %}
+    					{% endif %}	
+					{% endfor %}
+					</div>
+					<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators-{{ node.nid.value }}" data-bs-slide="prev">
+						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+						<span class="visually-hidden">Previous</span>
+					</button>
+					<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators-{{ node.nid.value }}" data-bs-slide="next">
+						<span class="carousel-control-next-icon" aria-hidden="true"></span>
+						<span class="visually-hidden">Next</span>
+					</button>
+				</div>
+				
+				
+			{% elseif formato_extras == 3 %}
+			
+				{# Pestaña #}
+				
+				<ul class="nav nav-tabs pxc-pestana" id="myTab-{{ node.nid.value }}" role="tablist">
+				{% for key, item in content.field_bloques_asociados %}
+				{% if key|first != '#' %}
+					{% set bloque_id = node.field_bloques_asociados[key].entity.nid.value %}
+                	{% if node.field_bloques_asociados[key].entity.hastranslation(lang_code) %}
+						{% set bloque_titulo = node.field_bloques_asociados[key].entity.translation(lang_code).field_titulo_visible.value %}
+					{% else %}
+						{% set bloque_titulo = node.field_bloques_asociados[key].entity.field_titulo_visible.value %}
+					{% endif %}
+					{% if key == 0 %}	
+						<li class="nav-item" role="presentation">
+    						<button class="nav-link active" id="b-tab-{{ node.nid.value }}-{{ bloque_id }}" data-bs-toggle="tab" data-bs-target="#tab-{{ node.nid.value }}-{{ bloque_id }}" type="button" role="tab" aria-controls="tab-{{ node.nid.value }}-{{ bloque_id }}" aria-selected="true"><span>{{ bloque_titulo }}</span></button>
+  						</li>
+					{% else %}
+						<li class="nav-item" role="presentation">
+    						<button class="nav-link" id="b-tab-{{ node.nid.value }}-{{ bloque_id }}" data-bs-toggle="tab" data-bs-target="#tab-{{ node.nid.value }}-{{ bloque_id }}" type="button" role="tab" aria-controls="tab-{{ node.nid.value }}-{{ bloque_id }}" aria-selected="false"><span>{{ bloque_titulo }}</span></button>
+  						</li>
+					{% endif %}
+				{% endif %}	
+				{% endfor %}
+				</ul>
+				<div class="tab-content" id="myTabContent-{{ node.nid.value }}">
+				{% for key, item in content.field_bloques_asociados %}
+				{% if key|first != '#' %}
+					{% set bloque_id = node.field_bloques_asociados[key].entity.nid.value %}
+                	{% if node.field_bloques_asociados[key].entity.hastranslation(lang_code) %}
+						{% set bloque_titulo = node.field_bloques_asociados[key].entity.translation(lang_code).field_titulo_visible.value %}
+					{% else %}
+						{% set bloque_titulo = node.field_bloques_asociados[key].entity.field_titulo_visible.value %}
+					{% endif %}
+					{% if key == 0 %}	
+						<div class="tab-pane fade show active" id="tab-{{ node.nid.value }}-{{ bloque_id }}" role="tabpanel" aria-labelledby="b-tab-{{ node.nid.value }}-{{ bloque_id }}">
+							{{ item }}
+						</div>
+					{% else %}
+						<div class="tab-pane fade" id="tab-{{ node.nid.value }}-{{ bloque_id }}" role="tabpanel" aria-labelledby="b-tab-{{ node.nid.value }}-{{ bloque_id }}">
+							{{ item }}
+						</div>
+					{% endif %}
+				{% endif %}	
+				{% endfor %}
+				</div>
+				
+			{% elseif formato_extras == 4 %}	
+			
+				{# Slick slider #}
+				<div class="pxc-ss-carrusel-sencillo">
+					<div class="{{ clasese }}">
+						{% for key, item in content.field_bloques_asociados %}
+						    {% if key|first != '#' %}
+							<div>
+								{{ item }}
+							</div>
+							{% endif %}
+						{% endfor %}
+					</div>
+				</div>
+				
+			{% elseif formato_extras == 5 %}
+			
+				{# Pestaña vertical (pendiente) #}
+				{# Encabezados #}
+				<div class="pxc-pestana-vertical">
+				<div class="d-flex align-items-start">
+				<div class="nav flex-column nav-pills me-3" id="v-pills-tab-{{ node.nid.value }}" role="tablist" aria-orientation="vertical">
+				{% set contador = 0 %}
+				{% for key, item in content.field_bloques_asociados %}
+				{% if key|first != '#' %}
+
+				  {# Variables #}
+				  {% set bloque_id = node.field_bloques_asociados[key].entity.nid.value %}
+                  {% if node.field_bloques_asociados[key].entity.hastranslation(lang_code) %}
+						{% set bloque_titulo = node.field_bloques_asociados[key].entity.translation(lang_code).field_titulo_visible.value %}
+					{% else %}
+						{% set bloque_titulo = node.field_bloques_asociados[key].entity.field_titulo_visible.value %}
+					{% endif %}
+
+				  {% if contador == 0 %}
+					<button class="nav-link active" id="v-pills-tab-{{ node.nid.value }}-{{ bloque_id }}" data-bs-toggle="pill" data-bs-target="#v-pills-{{ node.nid.value }}-{{ bloque_id }}" type="button" role="tab" aria-controls="v-pills-{{ node.nid.value }}-{{ bloque_id }}" aria-selected="true">{{ bloque_titulo }} <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"></path></svg></button>
+				  {% else %}
+					<button class="nav-link" id="v-pills-tab-{{ node.nid.value }}-{{ bloque_id }}" data-bs-toggle="pill" data-bs-target="#v-pills-{{ node.nid.value }}-{{ bloque_id }}" type="button" role="tab" aria-controls="v-pills-{{ node.nid.value }}-{{ bloque_id }}" aria-selected="false">{{ bloque_titulo }} <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"></path></svg></button>
+				  {% endif %}
+
+				  {% set contador = contador + 1 %}
+				{% endif %}  
+				{% endfor %}
+				</div>
+
+
+				{# Cuerpo #}
+				<div class="tab-content" id="v-pills-tabContent-{{ node.nid.value }}">
+				{% set contador = 0 %}
+				{% for key, item in content.field_bloques_asociados %}
+				{% if key|first != '#' %}
+
+				  {# Variables #}
+				  {% set bloque_id = node.field_bloques_asociados[key].entity.nid.value %}
+                  {% if node.field_bloques_asociados[key].entity.hastranslation(lang_code) %}
+						{% set bloque_titulo = node.field_bloques_asociados[key].entity.translation(lang_code).field_titulo_visible.value %}
+					{% else %}
+						{% set bloque_titulo = node.field_bloques_asociados[key].entity.field_titulo_visible.value %}
+					{% endif %}
+
+				  {% if contador == 0 %}
+					<div class="tab-pane fade show active" id="v-pills-{{ node.nid.value }}-{{ bloque_id }}" role="tabpanel" aria-labelledby="v-pills-tab-{{ node.nid.value }}-{{ bloque_id }}">
+						{{ item }}
+					</div>
+				  {% else %}
+					<div class="tab-pane fade" id="v-pills-{{ node.nid.value }}-{{ bloque_id }}" role="tabpanel" aria-labelledby="v-pills-tab-{{ node.nid.value }}-{{ bloque_id }}">
+						{{ item }}
+					</div>
+				  {% endif %}
+
+				  {% set contador = contador + 1 %}
+				{% endif %}  
+				{% endfor %}
+				</div>
+				</div>
+				</div>
+			
+			{% elseif formato_extras == 6 %}
+			
+				{# Pestaña desk y acordeon movil #}
+				
+				<div class="pxc-desktop">
+    				<ul class="nav nav-tabs pxc-pestana" id="myTab-{{ node.nid.value }}" role="tablist">
+    				{% for key, item in content.field_bloques_asociados %}
+    				{% if key|first != '#' %}
+    					{% set bloque_id = node.field_bloques_asociados[key].entity.nid.value %}
+                    	{% if node.field_bloques_asociados[key].entity.hastranslation(lang_code) %}
+    						{% set bloque_titulo = node.field_bloques_asociados[key].entity.translation(lang_code).field_titulo_visible.value %}
+    					{% else %}
+    						{% set bloque_titulo = node.field_bloques_asociados[key].entity.field_titulo_visible.value %}
+    					{% endif %}
+    					{% if key == 0 %}	
+    						<li class="nav-item" role="presentation">
+        						<button class="nav-link active" id="b-tab-{{ node.nid.value }}-{{ bloque_id }}" data-bs-toggle="tab" data-bs-target="#tab-{{ node.nid.value }}-{{ bloque_id }}" type="button" role="tab" aria-controls="tab-{{ node.nid.value }}-{{ bloque_id }}" aria-selected="true"><span>{{ bloque_titulo }}</span></button>
+      						</li>
+    					{% else %}
+    						<li class="nav-item" role="presentation">
+        						<button class="nav-link" id="b-tab-{{ node.nid.value }}-{{ bloque_id }}" data-bs-toggle="tab" data-bs-target="#tab-{{ node.nid.value }}-{{ bloque_id }}" type="button" role="tab" aria-controls="tab-{{ node.nid.value }}-{{ bloque_id }}" aria-selected="false"><span>{{ bloque_titulo }}</span></button>
+      						</li>
+    					{% endif %}
+    				{% endif %}	
+    				{% endfor %}
+    				</ul>
+    				<div class="tab-content" id="myTabContent-{{ node.nid.value }}">
+    				{% for key, item in content.field_bloques_asociados %}
+    				{% if key|first != '#' %}
+    					{% set bloque_id = node.field_bloques_asociados[key].entity.nid.value %}
+                    	{% if node.field_bloques_asociados[key].entity.hastranslation(lang_code) %}
+    						{% set bloque_titulo = node.field_bloques_asociados[key].entity.translation(lang_code).field_titulo_visible.value %}
+    					{% else %}
+    						{% set bloque_titulo = node.field_bloques_asociados[key].entity.field_titulo_visible.value %}
+    					{% endif %}
+    					{% if key == 0 %}	
+    						<div class="tab-pane fade show active" id="tab-{{ node.nid.value }}-{{ bloque_id }}" role="tabpanel" aria-labelledby="b-tab-{{ node.nid.value }}-{{ bloque_id }}">
+    							{{ item }}
+    						</div>
+    					{% else %}
+    						<div class="tab-pane fade" id="tab-{{ node.nid.value }}-{{ bloque_id }}" role="tabpanel" aria-labelledby="b-tab-{{ node.nid.value }}-{{ bloque_id }}">
+    							{{ item }}
+    						</div>
+    					{% endif %}
+    				{% endif %}	
+    				{% endfor %}
+    				</div>
+				</div>
+				
+				{# Solo móvil #}
+				<div class="accordion pxc-movil pxc-acordeon" id="accordion-{{ node.nid.value }}">
+				{% set contador = 1 %}
+				{% for key, item in content.field_bloques_asociados %}
+				{% if key|first != '#' %}
+					{% set bloque_id = node.field_bloques_asociados[key].entity.nid.value %}
+                	{% if node.field_bloques_asociados[key].entity.hastranslation(lang_code) %}
+						{% set bloque_titulo = node.field_bloques_asociados[key].entity.translation(lang_code).field_titulo_visible.value %}
+					{% else %}
+						{% set bloque_titulo = node.field_bloques_asociados[key].entity.field_titulo_visible.value %}
+					{% endif %}
+					<div class="accordion-item">
+					<h2 class="accordion-header" id="heading-{{ node.nid.value }}-{{ bloque_id }}">
+					  {% if key == 0 %}
+					  	<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ node.nid.value }}-{{ bloque_id }}" aria-expanded="true" aria-controls="collapse-{{ node.nid.value }}-{{ bloque_id }}">
+					  {% else %}
+					  	<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ node.nid.value }}-{{ bloque_id }}" aria-expanded="false" aria-controls="collapse-{{ node.nid.value }}-{{ bloque_id }}">
+					  {% endif %}
+						<span class="pxc-acordion-contador">{{ contador }}</span> {{ bloque_titulo }}
+					  </button>
+					  {% if node.field_bloques_asociados[key].entity.field_texto_extra is not empty %}{% if node.field_bloques_asociados[key].entity.hastranslation(lang_code) %}<span class="pxc-sub-descripcion">{{ node.field_bloques_asociados[key].entity.translation(lang_code).field_texto_extra.value|raw|striptags('<br><a>') }}</span>
+						{% else %}<span class="pxc-sub-descripcion">{{ node.field_bloques_asociados[key].entity.field_texto_extra.value|raw|striptags('<br><a>') }}</span>{% endif %}{% endif %}
+					</h2>
+					{% if key == 0 %}
+						<div id="collapse-{{ node.nid.value }}-{{ bloque_id }}" class="accordion-collapse collapse show" aria-labelledby="heading-{{ node.nid.value }}-{{ bloque_id }}" data-bs-parent="#accordion-{{ node.nid.value }}">
+					{% else %}
+						<div id="collapse-{{ node.nid.value }}-{{ bloque_id }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ node.nid.value }}-{{ bloque_id }}" data-bs-parent="#accordion-{{ node.nid.value }}">
+					{% endif %}
+					  <div class="accordion-body">
+						{{ item }}
+					  </div>
+					</div>
+				  </div>
+				  {% set contador = contador + 1 %}
+				{% endif %}  
+				{% endfor %}
+				</div>
+				
+				
+			{% elseif formato_extras == 7 %}
+			
+				{# Pestaña vertical y acordeon movil (pendiente) #}
+				{# Encabezados #}
+				<div class="pxc-pestana-vertical pxc-desktop">
+				<div class="d-flex align-items-start">
+				<div class="nav flex-column nav-pills me-3" id="v-pills-tab-{{ node.nid.value }}" role="tablist" aria-orientation="vertical">
+				{% set contador = 0 %}
+				{% for key, item in content.field_bloques_asociados %}
+				{% if key|first != '#' %}
+
+				  {# Variables #}
+				  {% set bloque_id = node.field_bloques_asociados[key].entity.nid.value %}
+                  {% if node.field_bloques_asociados[key].entity.hastranslation(lang_code) %}
+						{% set bloque_titulo = node.field_bloques_asociados[key].entity.translation(lang_code).field_titulo_visible.value %}
+					{% else %}
+						{% set bloque_titulo = node.field_bloques_asociados[key].entity.field_titulo_visible.value %}
+					{% endif %}
+
+				  {% if contador == 0 %}
+					<button class="nav-link active" id="v-pills-tab-{{ node.nid.value }}-{{ bloque_id }}" data-bs-toggle="pill" data-bs-target="#v-pills-{{ node.nid.value }}-{{ bloque_id }}" type="button" role="tab" aria-controls="v-pills-{{ node.nid.value }}-{{ bloque_id }}" aria-selected="true">{{ bloque_titulo }} <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"></path></svg></button>
+				  {% else %}
+					<button class="nav-link" id="v-pills-tab-{{ node.nid.value }}-{{ bloque_id }}" data-bs-toggle="pill" data-bs-target="#v-pills-{{ node.nid.value }}-{{ bloque_id }}" type="button" role="tab" aria-controls="v-pills-{{ node.nid.value }}-{{ bloque_id }}" aria-selected="false">{{ bloque_titulo }} <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"></path></svg></button>
+				  {% endif %}
+
+				  {% set contador = contador + 1 %}
+				{% endif %}  
+				{% endfor %}
+				</div>
+
+
+				{# Cuerpo #}
+				<div class="tab-content" id="v-pills-tabContent-{{ node.nid.value }}">
+				{% set contador = 0 %}
+				{% for key, item in content.field_bloques_asociados %}
+				{% if key|first != '#' %}
+
+				  {# Variables #}
+				  {% set bloque_id = node.field_bloques_asociados[key].entity.nid.value %}
+                  {% if node.field_bloques_asociados[key].entity.hastranslation(lang_code) %}
+						{% set bloque_titulo = node.field_bloques_asociados[key].entity.translation(lang_code).field_titulo_visible.value %}
+					{% else %}
+						{% set bloque_titulo = node.field_bloques_asociados[key].entity.field_titulo_visible.value %}
+					{% endif %}
+
+				  {% if contador == 0 %}
+					<div class="tab-pane fade show active" id="v-pills-{{ node.nid.value }}-{{ bloque_id }}" role="tabpanel" aria-labelledby="v-pills-tab-{{ node.nid.value }}-{{ bloque_id }}">
+						{{ item }}
+					</div>
+				  {% else %}
+					<div class="tab-pane fade" id="v-pills-{{ node.nid.value }}-{{ bloque_id }}" role="tabpanel" aria-labelledby="v-pills-tab-{{ node.nid.value }}-{{ bloque_id }}">
+						{{ item }}
+					</div>
+				  {% endif %}
+
+				  {% set contador = contador + 1 %}
+				{% endif %}  
+				{% endfor %}
+				</div>
+				</div>
+				</div>
+				
+				{# Solo móvil #}
+				<div class="accordion pxc-movil pxc-acordeon" id="accordion-{{ node.nid.value }}">
+				{% set contador = 1 %}
+				{% for key, item in content.field_bloques_asociados %}
+				{% if key|first != '#' %}
+					{% set bloque_id = node.field_bloques_asociados[key].entity.nid.value %}
+                	{% if node.field_bloques_asociados[key].entity.hastranslation(lang_code) %}
+						{% set bloque_titulo = node.field_bloques_asociados[key].entity.translation(lang_code).field_titulo_visible.value %}
+					{% else %}
+						{% set bloque_titulo = node.field_bloques_asociados[key].entity.field_titulo_visible.value %}
+					{% endif %}
+					<div class="accordion-item">
+					<h2 class="accordion-header" id="heading-{{ node.nid.value }}-{{ bloque_id }}">
+					  {% if key == 0 %}
+					  	<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ node.nid.value }}-{{ bloque_id }}" aria-expanded="true" aria-controls="collapse-{{ node.nid.value }}-{{ bloque_id }}">
+					  {% else %}
+					  	<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ node.nid.value }}-{{ bloque_id }}" aria-expanded="false" aria-controls="collapse-{{ node.nid.value }}-{{ bloque_id }}">
+					  {% endif %}
+						<span class="pxc-acordion-contador">{{ contador }}</span> {{ bloque_titulo }}
+					  </button>
+					  {% if node.field_bloques_asociados[key].entity.field_texto_extra is not empty %}{% if node.field_bloques_asociados[key].entity.hastranslation(lang_code) %}<span class="pxc-sub-descripcion">{{ node.field_bloques_asociados[key].entity.translation(lang_code).field_texto_extra.value|raw|striptags('<br><a>') }}</span>
+						{% else %}<span class="pxc-sub-descripcion">{{ node.field_bloques_asociados[key].entity.field_texto_extra.value|raw|striptags('<br><a>') }}</span>{% endif %}{% endif %}
+					</h2>
+					{% if key == 0 %}
+						<div id="collapse-{{ node.nid.value }}-{{ bloque_id }}" class="accordion-collapse collapse show" aria-labelledby="heading-{{ node.nid.value }}-{{ bloque_id }}" data-bs-parent="#accordion-{{ node.nid.value }}">
+					{% else %}
+						<div id="collapse-{{ node.nid.value }}-{{ bloque_id }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ node.nid.value }}-{{ bloque_id }}" data-bs-parent="#accordion-{{ node.nid.value }}">
+					{% endif %}
+					  <div class="accordion-body">
+						{{ item }}
+					  </div>
+					</div>
+				  </div>
+				  {% set contador = contador + 1 %}
+				{% endif %}  
+				{% endfor %}
+				</div>
+				
+			{% elseif formato_extras == 8 %}
+				
+				{# Acordeón #}
+				<div class="accordion pxc-acordeon" id="accordion-{{ node.nid.value }}">
+				{% set contador = 1 %}
+				{% for key, item in content.field_bloques_asociados %}
+				{% if key|first != '#' %}
+					{% set bloque_id = node.field_bloques_asociados[key].entity.nid.value %}
+                	{# set bloque_titulo = node.field_bloques_asociados[key].entity.field_titulo_visible.value #}
+					{% if node.field_bloques_asociados[key].entity.hastranslation(lang_code) %}
+						{% set bloque_titulo = node.field_bloques_asociados[key].entity.translation(lang_code).field_titulo_visible.value %}
+					{% else %}
+						{% set bloque_titulo = node.field_bloques_asociados[key].entity.field_titulo_visible.value %}
+					{% endif %}
+					<div class="accordion-item">
+					<h2 class="accordion-header" id="heading-{{ node.nid.value }}-{{ bloque_id }}">
+					  {% if key == 0 %}
+					  	<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ node.nid.value }}-{{ bloque_id }}" aria-expanded="false" aria-controls="collapse-{{ node.nid.value }}-{{ bloque_id }}">
+					  {% else %}
+					  	<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ node.nid.value }}-{{ bloque_id }}" aria-expanded="false" aria-controls="collapse-{{ node.nid.value }}-{{ bloque_id }}">
+					  {% endif %}
+						<span class="pxc-acordion-contador">{{ contador }}</span> {{ bloque_titulo }}
+					  </button>
+					  {% if node.field_bloques_asociados[key].entity.field_texto_extra is not empty %}{% if node.field_bloques_asociados[key].entity.hastranslation(lang_code) %}<span class="pxc-sub-descripcion">{{ node.field_bloques_asociados[key].entity.translation(lang_code).field_texto_extra.value|raw|striptags('<br><a>') }}</span>
+						{% else %}<span class="pxc-sub-descripcion">{{ node.field_bloques_asociados[key].entity.field_texto_extra.value|raw|striptags('<br><a>') }}</span>{% endif %}{% endif %}
+					</h2>
+					{% if key == 0 %}
+						<div id="collapse-{{ node.nid.value }}-{{ bloque_id }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ node.nid.value }}-{{ bloque_id }}" data-bs-parent="#accordion-{{ node.nid.value }}">
+					{% else %}
+						<div id="collapse-{{ node.nid.value }}-{{ bloque_id }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ node.nid.value }}-{{ bloque_id }}" data-bs-parent="#accordion-{{ node.nid.value }}">
+					{% endif %}
+					  <div class="accordion-body">
+						{{ item }}
+					  </div>
+					</div>
+				  </div>
+				  {% set contador = contador + 1 %}
+				{% endif %}  
+				{% endfor %}
+				</div>
+			{% else %}
+			
+				{{ content.field_bloques_asociados }}
+			{% endif %}
+		</div>
+	{% endif %}
+	
+	
+	{# 4. Contenidos anidados del bloque expuestos en modales #}
+	{% if node.field_modales_relacionados is not empty %}
+		<div class="pxc-bloque-modales-relacionadas">
+			{% for key, item in content.field_modales_relacionados %}
+			{% if key|first != '#' %}
+			    {% set modal_id = node.field_modales_relacionados[key].entity.nid.value %}
+                {% set modal_titulo = node.field_modales_relacionados[key].entity.field_titulo_visible.value %}
+				<div class="modal pxc-modal fade" id="exampleModal-{{ node.nid.value }}-{{ modal_id }}" tabindex="-1" aria-labelledby="exampleModalLabel-{{ node.nid.value }}-{{ modal_id }}" aria-hidden="true">
+				  <div class="modal-dialog modal-xl">
+					<div class="modal-content">
+					  <div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel-{{ node.nid.value }}-{{ modal_id }}">{{ modal_titulo }}</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					  </div>
+					  <div class="modal-body">
+						{{ item }}
+					  </div>
+					</div>
+				  </div>
+				</div>	
+			{% endif %}	
+			{% endfor %}
+		</div>
+	{% endif %}
+	
+	{# 5. Contenidos extras #}
+	{% if node.field_texto_extra is not empty %}
+	    <div class="pxc-bloque-texto-extra pt-5">
+	        {{ content.field_texto_extra }}
+	    </div>
+	{% endif %}
+	
+	{# 6. Anexos II #}
+	{% if node.field_anexos is not empty %}
+		<div class="pxc-bloque-anexos-2">{{ content.field_anexos }}</div>
+	{% endif %}
+
+</div>

@@ -1,0 +1,10 @@
+id: pixel_azure_chat_config
+plugin_id: pixel_azure_chat
+granularity: method
+configuration:
+  POST:
+    supported_formats:
+      - json
+    supported_auth:
+      - basic_auth
+      - cookie

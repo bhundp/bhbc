@@ -1,0 +1,873 @@
+// Librería de funcionalidades del Tagging
+
+// PART 1. JQuery
+(function($) {
+$(document).ready(function () {
+    
+    // PARTE I. Búsqueda
+    // ******************************************************************
+    // ******************************************************************
+    // ******************************************************************
+    // ******************************************************************
+    
+    // Carga por Ajax
+    // Monitorea los cambios en la vista que se recargan por Ajax
+    $( document ).on( "ajaxSuccess", function( event, xhr, settings) {
+        
+        // Logica de Ajax
+        ///////////////////////////////////////////////////////////////
+        
+        let urlOrigen = settings.url;
+        /* console.log("....................................");
+        console.log(settings.url);
+        console.log("...................................."); */
+        
+        if(urlOrigen.indexOf("views/ajax?search_api_fulltext") !== -1) {
+            // 1. Es un envío de la vista
+            if(urlOrigen.indexOf("page=") !== -1) {
+                // 1.1 Cuando pagina
+                console.log("Estas paginando");
+            }else{
+                // 1.2 Cuando hace clic en el botón
+                console.log("Estas cargando desde el clic");
+                // Hace faceting si hay más de 0 caracteres en el query, debería quedar en 3 mínimo
+                if($( "input[data-drupal-selector='edit-search-api-fulltext']" ).val().length >= 0) {
+                    // Modo recuperación (1) por los valores de campo en el form.
+                    console.log("Modo CLICK");
+                    // Modo recuperación (0) por GET
+                    recuperarFacets(1, function(respuesta) {
+                        console.log(respuesta);
+                        const tidsRespuesta = respuesta.facet_counts.facet_fields.itm_tid;
+                        const nidsRespuesta = respuesta.response.docs;
+                        // console.log(tidsRespuesta);
+                        // console.log(nidsRespuesta);
+                        let arrayTidsResponse = [];
+                        let arrayNidsResponse = [];
+                        let arraySizeResponse = [];
+                        let tempNidsResponse = [];
+                        // Si la respuesta no tiene ni tids ni nids indica que no hay resultados, entonces así ni recupere los nombres, ni las relaciones.
+                        if(tidsRespuesta.length > 0 && nidsRespuesta.length > 0) {
+                            // Extrae los tids del objeto JSON
+                            tidsRespuesta.forEach( function(valor, indice, array) {
+                                // Par, TID
+                                if(indice % 2 === 0) {
+                                    arrayTidsResponse.push(valor);
+                                }
+                                // Impar, Sizes
+                                if(indice % 2 !== 0) {
+                                    arraySizeResponse.push(valor);
+                                }
+                            });
+                            // Extrae los nids del objeto JSON
+                            nidsRespuesta.forEach( function(valor, indice, array) {
+                                tempNidsResponse = valor.ss_search_api_id.split(":");
+                                arrayNidsResponse.push(tempNidsResponse[1].replace("node/",""));
+                            });
+                            let stringTids = arrayTidsResponse.join("-");
+                            console.log("ST: " + stringTids);
+                            let stringNids = arrayNidsResponse.join("-");
+                            console.log("SN: " + stringNids);
+                            let stringSizes = arraySizeResponse.join("-");
+                            console.log("SZ: " + stringSizes);
+                            recuperarTaxonomias(stringTids, stringSizes);
+                            $("#pxc-buscador-os-fila-2-bolitas").attr("data-pxc-tids", stringTids);
+                            $("#pxc-buscador-os-fila-2-bolitas").attr("data-pxc-nids", stringNids);
+                            $("#pxc-buscador-os-fila-2-bolitas").attr("data-pxc-sizes", stringSizes);
+                        }
+                    });
+                }
+            }
+        }else{
+            console.log("Estas en un evento que no es de la vista. ¿Cuál?:");
+            console.log(settings.url);
+        }
+    });
+    
+    // Carga por Load
+    // Si hay parámetros de búsqueda que los recupere para hacer el query de Facets ONLOAD.
+    if($('#views-exposed-form-busqueda-os-page-1').length > 0 ) {
+        
+        // Logica de On load
+        ///////////////////////////////////////////////////////////////
+        console.log("Hola estoy cargando");
+        
+        // Hace faceting si hay más de 0 caracteres en el query, debería quedar en 3 mínimo
+        if($( "input[data-drupal-selector='edit-search-api-fulltext']" ).val().length >= 0) {
+            console.log("Modo GET");
+            // Modo recuperación (0) por GET
+            recuperarFacets(0, function(respuesta) {
+                console.log(respuesta);
+                const tidsRespuesta = respuesta.facet_counts.facet_fields.itm_tid;
+                const nidsRespuesta = respuesta.response.docs;
+                // console.log(tidsRespuesta);
+                // console.log(nidsRespuesta);
+                let arrayTidsResponse = [];
+                let arrayNidsResponse = [];
+                let arraySizeResponse = [];
+                let tempNidsResponse = [];
+                // Si la respuesta no tiene ni tids ni nids indica que no hay resultados, entonces así ni recupere los nombres, ni las relaciones.
+                if(tidsRespuesta.length > 0 && nidsRespuesta.length > 0) {
+                    // Extrae los tids del objeto JSON
+                    tidsRespuesta.forEach( function(valor, indice, array) {
+                        // Par, TID
+                        if(indice % 2 === 0) {
+                            arrayTidsResponse.push(valor);
+                        }
+                        // Impar, Sizes
+                        if(indice % 2 !== 0) {
+                            arraySizeResponse.push(valor);
+                        }
+                    });
+                    // Extrae los nids del objeto JSON
+                    nidsRespuesta.forEach( function(valor, indice, array) {
+                        tempNidsResponse = valor.ss_search_api_id.split(":");
+                        arrayNidsResponse.push(tempNidsResponse[1].replace("node/",""));
+                    });
+                    let stringTids = arrayTidsResponse.join("-");
+                    console.log("ST: " + stringTids);
+                    let stringNids = arrayNidsResponse.join("-");
+                    console.log("SN: " + stringNids);
+                    let stringSizes = arraySizeResponse.join("-");
+                    console.log("SZ: " + stringSizes);
+                    recuperarTaxonomias(stringTids, stringSizes);
+                    $("#pxc-buscador-os-fila-2-bolitas").attr("data-pxc-tids", stringTids);
+                    $("#pxc-buscador-os-fila-2-bolitas").attr("data-pxc-nids", stringNids);
+                    $("#pxc-buscador-os-fila-2-bolitas").attr("data-pxc-sizes", stringSizes);
+                }
+            });
+        }
+    }
+    
+    // Lanzar consulta filtrada cuando se hace clic en una pastilla
+    $("body").on( "click", "#pxc-buscador-os-pastillas li a", function(e) {
+        e.preventDefault();
+        
+        let taxonomy = $(this).children(".pxc-buscador-os-pastillas-label").text();
+        console.log(taxonomy);
+        $( "input[data-drupal-selector='edit-taxonomy']" ).val(taxonomy).change();
+        //$( "#views-exposed-form-busqueda-os-page-1" ).trigger( "submit" );
+        // recargar(e);
+        $("input[data-drupal-selector='edit-submit-busqueda-os-2']").click();
+    });
+    
+    // Lanzar el proceso de dibujo de las bolitas si hay datos
+    $( "#pxc-relaciones-tab" ).on( "click", function() {
+        let tids = $("#pxc-buscador-os-fila-2-bolitas").attr("data-pxc-tids");
+        let nids = $("#pxc-buscador-os-fila-2-bolitas").attr("data-pxc-nids");
+        let sizes = $("#pxc-buscador-os-fila-2-bolitas").attr("data-pxc-sizes");
+        if(tids.length > 0 && nids.length > 0 && sizes.length > 0) {
+            recuperarTaxonomiasObj(tids, sizes, function (respuesta) {
+               // console.log(respuesta);
+               if(respuesta.length > 0) {
+                    relacionarTaxonomias(tids,nids, respuesta); 
+               }
+            });
+        }else{
+            $("#pxc-bolitas-aviso").html("<p>Nothing to show.</p>");
+        }
+    });
+    
+    // PARTE III. Control del UI
+    // ******************************************************************
+    // ******************************************************************
+    // ******************************************************************
+    // ******************************************************************
+    // Esta en la Main.js
+    
+    // PARTE IV. Funciones
+    // ******************************************************************
+    // ******************************************************************
+    // ******************************************************************
+    // ******************************************************************
+    
+    // Enviar la recarga 
+    
+    function recargar(e) {
+        
+        e.preventDefault();
+        
+        let formData = JSON.parse($( "script[data-drupal-selector='drupal-settings-json']" ).text());
+        
+        let domId = "";
+        let pageElem = "0";
+        let data = formData.views.ajaxViews;
+        for (let key in data) {
+            if (data.hasOwnProperty(key)) {
+                value = data[key];
+                domId = value.view_dom_id;
+                pageElem = value.pager_element;
+            }
+        }
+        // console.log(domId);
+        // console.log(pageElem);
+        
+        let url = "/views/ajax?";
+        url += "search_api_fulltext=" + $( "input[data-drupal-selector='edit-search-api-fulltext']" ).val();
+        url += "&tipo=" + $( "select[data-drupal-selector='edit-tipo']" ).val();
+        url += "&status=" + $( "select[data-drupal-selector='edit-status']" ).val();
+        url += "&autor=" + $( "input[data-drupal-selector='edit-autor']" ).val();
+        url += "&taxonomy=";
+        url += "&created%5Bmin%5D=" + $( "input[data-drupal-selector='edit-created-min']" ).val();
+        url += "&created%5Bmax%5D=" + $( "input[data-drupal-selector='edit-created-max']" ).val();
+        url += "&filename_op=" + $( "select[data-drupal-selector='edit-filename-op']" ).val();
+        url += "&imagenes%5Bvalue%5D=" + "";
+        url += "&filename_1_op=" + $( "select[data-drupal-selector='edit-filename-1-op']" ).val();
+        url += "&audio%5Bvalue%5D=" + "";
+        url += "&filename_2_op=" + $( "select[data-drupal-selector='edit-filename-2-op']" ).val();
+        url += "&videos%5Bvalue%5D=" + "";
+        url += "&title_op=" + $( "select[data-drupal-selector='edit-title-op']" ).val();
+        url += "&videoenlace%5Bvalue%5D=" + "";
+        url += "&sort_by=" + $( "select[data-drupal-selector='edit-sort-by']" ).val();
+        url += "&sort_order=" + $( "select[data-drupal-selector='edit-sort-order']" ).val();
+        
+        url += "&_wrapper_format=drupal_ajax";
+        
+        url += "&search_api_fulltext=" + $( "input[data-drupal-selector='edit-search-api-fulltext']" ).val();
+        url += "&tipo=" + $( "select[data-drupal-selector='edit-tipo']" ).val();
+        url += "&status=" + $( "select[data-drupal-selector='edit-status']" ).val();
+        url += "&autor=" + $( "input[data-drupal-selector='edit-autor']" ).val();
+        url += "&taxonomy=" + $( "input[data-drupal-selector='edit-taxonomy']" ).val();
+        url += "&created%5Bmin%5D=" + $( "input[data-drupal-selector='edit-created-min']" ).val();
+        url += "&created%5Bmax%5D=" + $( "input[data-drupal-selector='edit-created-max']" ).val();
+        url += "&filename_op=" + $( "select[data-drupal-selector='edit-filename-op']" ).val();
+        url += "&imagenes%5Bvalue%5D=" + "";
+        url += "&filename_1_op=" + $( "select[data-drupal-selector='edit-filename-1-op']" ).val();
+        url += "&audio%5Bvalue%5D=" + "";
+        url += "&filename_2_op=" + $( "select[data-drupal-selector='edit-filename-2-op']" ).val();
+        url += "&videos%5Bvalue%5D=" + "";
+        url += "&title_op=" + $( "select[data-drupal-selector='edit-title-op']" ).val();
+        url += "&videoenlace%5Bvalue%5D=" + "";
+        url += "&sort_by=" + $( "select[data-drupal-selector='edit-sort-by']" ).val();
+        url += "&sort_order=" + $( "select[data-drupal-selector='edit-sort-order']" ).val();
+        
+        /*url += "&search_api_fulltext=" +
+        url += "&tipo=" +All
+        url += "&status=" +1
+        url += "&autor=" +
+        url += "&taxonomy=" +Pobreza%20e%20inequidad
+        url += "&created%5Bmin%5D=" +
+        url += "&created%5Bmax%5D=" +
+        url += "&filename_op=" +%3D
+        url += "&imagenes%5Bvalue%5D=" +
+        url += "&filename_1_op=" +%3D
+        url += "&audio%5Bvalue%5D=" +
+        url += "&filename_2_op=" +%3D
+        url += "&videos%5Bvalue%5D=" +
+        url += "&title_op=" +%3D
+        url += "&videoenlace%5Bvalue%5D=" +
+        url += "&sort_by=" +created
+        url += "&sort_order=" +DESC*/
+        
+        url += "&view_name=busqueda_os";
+        url += "&view_display_id=page_1";
+        url += "&view_args=";
+        url += "&view_path=%2Fbusqueda-os";
+        url += "&view_base_path=busqueda-os";
+        url += "&view_dom_id="+ domId;
+        url += "&pager_element=" + pageElem;
+        url += "&_drupal_ajax=1";
+        url += "&ajax_page_state%5Btheme%5D=" + formData.ajaxPageState.theme;
+        url += "&ajax_page_state%5Btheme_token%5D=";
+        url += "&ajax_page_state%5Blibraries%5D=" + formData.ajaxPageState.libraries;
+        
+        console.log("--Relaunching--");
+        
+        console.log(formData);
+        
+        // console.log("Url: ");
+        // console.log(url);
+        
+        $.ajax({
+          type: "GET",
+          url: url,
+          dataType: 'json',
+          contentType: "application/json",
+          success: function(data){
+                // Drupal.attachBehaviors();
+                console.log("-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-");
+                console.log(data);
+                let elementoEl = $("#block-pixel-content").children(".views-element-container").children("div");
+                elementoEl.replaceWith(data[2].data);
+                elementoEl.attr("data-once","ajax-pager");
+                // $(".js-pager__items").addClass("visually-hidden");
+                // $(".js-pager__items").attr("data-once","infinite-scroll");
+                
+                
+                // https://easytechgreen.com/blog/ajax-view-scroll-top
+                // https://quilltez.com/blog/drupal-render-views-through-ajax
+                // Drupal.settings = data[0].settings;
+                // drupalSettings.views = data[0].settings.views;
+                console.log("--------------Drup Beh---");
+                console.log(data[1].selector);
+                
+                var currentViewId = data[1].selector.replace('.js-view-dom-id-', 'views_dom_id:');
+                
+                console.log(currentViewId);
+                // Drupal.attachBehaviors(elementoEl, Drupal.settings);
+                
+                var $window = $(window);
+                var pagerSelector = '[data-drupal-views-infinite-scroll-pager]';
+                var contentWrapperSelector = '[data-drupal-views-infinite-scroll-content-wrapper]';
+                var scrollThreshold = 200;
+                var scrollEvent = 'scroll.views_infinite_scroll';
+                var automaticPagerSelector = '[data-drupal-views-infinite-scroll-pager="automatic"]';
+                
+                var view = Drupal.views.instances[currentViewId];
+                once.remove('ajax-pager', view.$view);
+                once.remove('exposed-form', view.$exposed_form);
+                
+                var $existingPager = view.$view.find(pagerSelector);
+                once.remove('infinite-scroll', $existingPager);
+                
+                var $newRows = elementoEl.find(contentWrapperSelector).children();
+                var $newPager = elementoEl.find(pagerSelector);
+                
+                view.$view.find(contentWrapperSelector)
+                  // Trigger a jQuery event on the wrapper to inform that new content was
+                  // loaded and allow other scripts to respond to the event.
+                  .trigger('views_infinite_scroll.new_content', $newRows.clone())
+                  // Add the new rows to existing view.
+                  .append($newRows);
+                  
+                $existingPager.replaceWith($newPager);
+                
+                Drupal.behaviors.views_infinite_scroll_automatic = {
+                    attach : function (context, settings) {
+                      once('infinite-scroll', automaticPagerSelector, context).forEach(function (elem) {
+                        var $pager = $(elem);
+                        $pager.addClass('visually-hidden');
+                        var isLoadNeeded = function () {
+                          return window.innerHeight + window.pageYOffset > $pager.offset().top - scrollThreshold;
+                        };
+                        $window.on("scroll", function () {
+                          if (isLoadNeeded()) {
+                            $pager.find('[rel=next]').click();
+                            console.log("su madrfde");
+                            $window.off("scroll");
+                          }
+                        });
+                      });
+                    }
+                 };
+                 
+                 // Run views and VIS behaviors.
+                Drupal.attachBehaviors(view.$view[0]);
+                
+                console.log("-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-");
+                
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(errorThrown);
+          }
+        });
+    }
+    
+    
+    // Recupera el nombre de las taxonomías recuperadas a través de la consulta de facets al servidor de búsquedas mediante imn string de tipo tid1-tid2-tidn.
+    
+    function recuperarTaxonomias(tids, sizes) {
+        
+        let urlString = '/pxc-simple-taxonomy-listar?tids=' + tids + "&sizes=" + sizes;
+            
+        console.log("2. Start Ajax Lista Taxos");
+        $.ajax({
+            url: urlString,
+            type: 'GET',
+            dataType: 'json',
+            contentType: "application/json",
+            success: function(data){
+                dibujarPastillas(data);
+                //process the JSON data etc
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(errorThrown);
+            }
+        });
+        console.log("2. End Ajax Lista Taxos");
+    }
+    
+    // Recupera el nombre de las taxonomías recuperadas a través de la consulta de facets al servidor de búsquedas mediante imn string de tipo tid1-tid2-tidn. Mutación de la anterior para usar con callback
+    
+    function recuperarTaxonomiasObj(tids, sizes, callback) {
+        
+        let urlString = '/pxc-simple-taxonomy-listar?tids=' + tids + "&sizes=" + sizes;
+            
+        $.ajax({
+            url: urlString,
+            type: 'GET',
+            dataType: 'json',
+            contentType: "application/json",
+            success: callback,
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(errorThrown);
+            }
+        });
+
+    }
+    
+    // Dibuja las pastillas en el área pxc-buscador-os-pastillas y las bolitas
+    
+    function dibujarPastillas(data) {
+        data.sort((a, b) => b.size - a.size);
+        data.forEach( function(valor, indice, array) {
+            console.log("Índice: " + indice);
+            console.log(valor);
+            $("#pxc-buscador-os-pastillas").append("<li class='pxc-buscador-os-pastillas-li pxc-buscador-os-pastillas-li-"+valor.size+"'><a href='#' data-id-term='"+ valor.id +"' data-size-term='"+ valor.size +"'><span class='pxc-buscador-os-pastillas-label'>"+ valor.label +"</span><span class='pxc-buscador-os-pastillas-size'>"+ valor.size +"</span></a></li>");
+        });
+    }
+    
+    // Crea las relaciones a partir de los datos retornados que relacionan ciertos NIds con ciertos Tids.
+    
+    function createRelationships(respuesta, tids, nids, listataxos) {
+        let arrayTids = tids.split("-");
+        let objTidsSizes = {};
+        let objNidsRels = {};
+        let objEdges = [];
+        let arrayNids = nids.split("-");
+        
+        // Define el objeto objTidsSizes para relacionar Tids con sus números de ocurrencia, lo cual deteremina el tamaño.
+        arrayTids.forEach( function(valor, indice, array) {
+            objTidsSizes['tid_'+valor] = (JSON.parse('{"tid": '+ valor +',"size": 0}'));
+        });
+        
+        // Crea el objeto objNidsRels para relacionar todas las taxonomias que están relacionadas con un determinado nodo.
+        let contadoredgesglobal = 0;
+        arrayNids.forEach( function(valor, indice, array) {
+            let relaciones = "0-";
+            let edges = "";
+            let tempArray = [];
+            let contadorfe = 0;
+            let contadoredges = 0;
+            // Para cada NID, recorra las parejas y extraiga las taxonomías con las que está relacionada.
+                for (var key in respuesta) {
+                    if(respuesta[key].nid == valor) {
+                        if(contadorfe == 0) {
+                            relaciones += respuesta[key].tid;
+                        }else{
+                            // Si no es la primera taxonomías que tiene, empiece a generar las llaves que necesita el componente.
+                            // console.log("relaciones: " + relaciones);
+                            tempArray = relaciones.split("-");
+                            tempArray.forEach(function(current, index, array1) {
+                               if(current != "0") {
+                                    objEdges[contadoredgesglobal] = (JSON.parse('{ "from": '+current+', "to": '+respuesta[key].tid+' }'));
+                                    if(contadoredges == 0) {
+                                        edges += '{ "from": '+current+', "to": '+respuesta[key].tid+' }'; 
+                                    }else{
+                                        edges += ', { "from": '+current+', "to": '+respuesta[key].tid+' }'; 
+                                    }
+                                    contadoredges++;
+                                    contadoredgesglobal++;
+                               }
+                            });
+                            relaciones += "-" + respuesta[key].tid;
+                            
+                        }
+                        contadorfe++;
+                    }
+                }
+        // console.log('{"nid": '+ valor +', "related": "'+ relaciones +'", "edges": ["'+ edges +'"]}');
+        objNidsRels['nid_'+valor] = (JSON.parse('{"nid": '+ valor +', "related": "'+ relaciones +'", "edges": ['+ edges +']}'));
+        }, respuesta);
+        
+        // Remover duplicados de Edges
+        const objEdgesUnique = objEdges.filter((value, index, self) =>
+                index === self.findIndex((t) => (
+                t.from === value.from && t.to === value.to
+            ))
+        );
+            
+        // Popula el objeto objTidsSizes con los tids y sus respectivos tamaños
+        // console.log("Contar: " + (respuesta).length);
+        // console.log(respuesta);
+        let tempKey = "";
+        let maxValor = 0;
+        let minValor = 0;
+        for (var key in respuesta) {
+            // console.log(respuesta[key]);
+            // Crea una llave que permite ubicar la taxonomia en el Objeto objTidsSizesRels.
+            tempKey = "tid_" + respuesta[key].tid;
+            // A. Sumele 1 al valor sizes de la taxonomia en objTidsSizesRels por cada vez que la encuentre, pues quiere decir que tiene más nodos relacionados con ella.
+            eval("objTidsSizes." + tempKey + ".size = objTidsSizes." + tempKey + ".size + 1;");
+        }
+        
+        let nuevoListado = listataxos;
+        nuevoListado.sort((a, b) => b.size - a.size);
+            
+        /*
+        console.log("Tids vs. tamaños:");
+        console.log(objTidsSizes);
+        console.log("Taxos por nodos:");
+        console.log(objNidsRels);
+        console.log("Edges:");
+        console.log(objEdges);
+        console.log("Edges Unique:");
+        console.log(objEdgesUnique);
+        console.log("Json analizado:");
+        console.log(respuesta);*/
+        console.log("Lista taxos:");
+        console.log(listataxos);
+        /*console.log("Lista taxos ordenada:");
+        console.log(nuevoListado);*/
+        
+        // Se extrae el size máximo y mínimo, size que está dado basicamente por el número de nodos relacionados con cada taxo.
+        let maxSize = nuevoListado[0].size;
+        let minSize = nuevoListado[(nuevoListado.length - 1)].size;
+        console.log("Max: " + maxSize + " Min:" + minSize);
+        
+        ///////// Si hay datos cree las bolitas
+        if(Object.keys(objTidsSizes).length > 0 && listataxos.length > 0) {
+            
+            console.log("Drawing nodes...");
+            
+            // 1 Creación de las bolitas
+            let nodes = new vis.DataSet([]);
+            let conteo = 0;
+            let escala = 0;
+            listataxos.forEach( function(valor, indice, array) {
+                // Se normaliza la escala para que independientemente del valor, el size de la bolita siempre sea entre 0 y 1.
+                if(minSize == maxSize) {
+                    escala = 1;
+                }else{
+                    escala = ((listataxos[conteo].size - minSize)/(maxSize - minSize));
+                }
+                console.log(escala);
+                if(conteo <= 9) {
+                    nodes.add([{ id: listataxos[conteo].id, value:escala , label: listataxos[conteo].label, font: { strokeWidth: 3, strokeColor: "white" }, color: retornaColor((conteo + 1)) }]);
+                }else{
+                    nodes.add([{ id: listataxos[conteo].id, value:escala , label: listataxos[conteo].label, font: { strokeWidth: 3, strokeColor: "white" }, color: retornaColor(0) }]);
+                }
+                conteo++;
+            });
+            
+            console.log(nodes);
+            
+            // 2. Edges
+            let edges = new vis.DataSet(objEdgesUnique);
+            
+            // 3 Creación del diagrama
+            let container = document.getElementById("pxc-bolitas");
+            let data = {
+                nodes: nodes,
+                edges: edges,
+            };
+            // 2.3.1 Aquí se pueden definir settings generales para todas las bolitas
+            let options = {
+              nodes: {
+                    shape: "dot",
+                    borderWidth : 0 ,
+                    shadow: true,
+                    font: "14px m-book #0c4d92",
+                    scaling: {
+                      customScalingFunction: function (min, max, total, value) {
+                        return value / total;
+                      },
+                      min: 10,
+                      max: 100,
+                    },
+                  },
+                  interaction: { hover: true }
+                };
+            let network = new vis.Network(container, data, options);
+            
+            // Evento de hover (hover)
+            network.on("hoverNode", function (params) {
+                console.log("hoverNode Event:", params['node']);
+            });
+              
+            network.on("zoom", function (params) {
+                console.log("hoverNode Event:", params);
+            });
+            
+            network.on("selectNode", function (params) {
+                console.log("selectNode Event on click:", params['nodes'][0]);
+                let taxonomy = "";
+                let conteo = 0;
+                listataxos.forEach( function(valor, indice, array) {
+                    if(listataxos[conteo].id == params['nodes'][0]) {
+                        taxonomy = listataxos[conteo].label;
+                    }
+                    conteo++;
+                });
+                console.log(taxonomy);
+                $( "input[data-drupal-selector='edit-taxonomy']" ).val(taxonomy).change();
+                $( "#views-exposed-form-busqueda-os-page-1" ).trigger( "submit" );
+            });
+        }
+    }
+    
+    function retornaColor(fijo) {
+        let cual = fijo;
+        if(fijo == 0) {
+            cual = Math.floor((Math.random() * 10) + 1);
+        }
+        let color = "#a9e0f0";
+        if(cual == 1) {
+            color = "#f9e2c4";
+        }
+        if(cual == 2) {
+            color = "#f9cde0";
+        }
+        if(cual == 3) {
+            color = "#c8dff1";
+        }
+        if(cual == 4) {
+            color = "#d8e6ca";
+        }
+        if(cual == 5) {
+            color = "#decae6";
+        }
+        if(cual == 6) {
+            color = "#cdf9df";
+        }   
+        if(cual == 7) {
+            color = "#cdcdf9";
+        }
+        if(cual == 8) {
+            color = "#c8c8c8";
+        }
+        if(cual == 9) {
+            color = "#bfb8c9";
+        }
+        if(cual == 10) {
+            color = "#a9e0f0";
+        }
+        return color;
+    }
+    
+    
+    // Genera tres objetos a partir de las taxonomías y nodos obtenidos través de la consulta de facets al servidor de búsquedas. El primer objeto objTidsSizes incluye por cada tid, su escala y el segundo objeto objNidsRels crea por nid las relaciones que deben existir entre taxos. Finalmente el tercer objeto objEdgesUnique (el más útil), incluye un arreglo de edges consolidado y sin repeticiones.
+    
+    function relacionarTaxonomias(tids, nids, objrespuesta) {
+        
+        console.log("Log al relacionar taxonomias");
+
+
+        urlString = '/pxc-simple-taxonomy-relacionar?tids=' + tids + "&nids=" + nids;
+            
+        console.log("3. Start Ajax Relación Taxos");
+        
+        console.log(urlString);
+        
+        // Consulta a la base de datos las parejas de relación que existen entre todos los nids dados y los tids para obtener un objeto similar al que está abajo en const "respuesta".
+        $.ajax({
+            url: urlString,
+            type: 'GET',
+            dataType: 'json',
+            contentType: "application/json",
+            success: function(data){
+                createRelationships(data, tids, nids, objrespuesta);
+                //process the JSON data etc
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(errorThrown);
+            }
+        });
+            
+        console.log("3. End Ajax Relación Taxos");
+
+    }    
+    
+    function recuperarFacets(momento, callback) {
+    
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        
+        let valor = "";
+        let search_api_fulltext = "";
+        let tipo = "";
+        let estatus = "";
+        let autor = "";
+        let taxonomy = "";
+        let created_min = "";
+        let created_max = "";
+        let filename_op = "";
+        let filename_1_op = "";
+        let filename_2_op = "";
+        let title_op = "";
+        let conteo = 0;
+        
+        // Momento 0, cuando carga y la URL tiene parámetros, es decir que la búsqueda viene de otra hoja.
+        if(momento == 0) {
+            // Iterar sobre los parámetros
+            for (let p of urlParams) { 
+                // Campo de texto
+                if(p[0] == 'search_api_fulltext') {
+                    // [[--search_api_fulltext--]]
+                    valor = p[1];
+                    if (valor.length > 0) {
+                        valor = valor.toLowerCase();
+                        search_api_fulltext = valor;
+                    }else{
+                        search_api_fulltext = "";
+                    }
+                    conteo++;
+                }
+                // Tipo
+                if(p[0] == 'tipo') {
+                    // [[--tipo--]]
+                    valor = p[1];
+                    valor = valor.toLowerCase();
+                    if (valor.length > 0) {
+                        tipo = valor;
+                    }
+                    conteo++;
+                }
+                // Status
+                if(p[0] == 'status') {
+                    // [[--estatus--]]
+                    valor = p[1];
+                    if(valor == "1" || valor == "0") {
+                        estatus = valor;
+                    }
+                    conteo++;
+                }
+                // Autor
+                if(p[0] == 'autor') {
+                    // [[--autor--]]
+                    valor = p[1];
+                    if (valor.length > 0) {
+                        // valor = valor.toLowerCase();
+                        autor = valor;
+                    }
+                    conteo++;
+                }
+                // Taxonomy
+                if(p[0] == 'taxonomy') {
+                    // [[--taxonomy--]]
+                    valor = p[1];
+                    if (valor.length > 0) {
+                        // valor = valor.toLowerCase();
+                        taxonomy = valor;
+                    }
+                    conteo++;
+                }
+                // Fecha inicio
+                if(p[0] == 'created[min]') {
+                    // [[--created_min--]]
+                    valor = p[1];
+                    if (valor.length > 0) {
+                        created_min = valor;
+                    }
+                    conteo++;
+                }
+                // Fecha fin
+                if(p[0] == 'created[max]') {
+                    // [[--created_max--]]
+                    valor = p[1];
+                    if (valor.length > 0) {
+                        created_max = valor;
+                    }
+                    conteo++;
+                }
+                // Imagenes
+                if(p[0] == 'filename_op') {
+                    // [[--imagenes--]]
+                    valor = p[1];
+                    if (valor.length > 0) {
+                        filename_op = valor;
+                    }
+                    conteo++;
+                }
+                // Audios
+                if(p[0] == 'filename_1_op') {
+                    // [[--imagenes--]]
+                    valor = p[1];
+                    if (valor.length > 0) {
+                        filename_1_op = valor;
+                    }
+                    conteo++;
+                }
+                // Videos
+                if(p[0] == 'filename_2_op') {
+                    // [[--imagenes--]]
+                    valor = p[1];
+                    if (valor.length > 0) {
+                        filename_2_op = valor;
+                    }
+                    conteo++;
+                }
+                // Video links
+                if(p[0] == 'title_op') {
+                    // [[--imagenes--]]
+                    valor = p[1];
+                    if (valor.length > 0) {
+                        title_op = valor;
+                    }
+                    conteo++;
+                }
+            }
+            // Si ciertos campos no se proveen entonces rellenelos por defecto
+            if(estatus.length == 0) {
+                // [[--estatus--]]
+                estatus = 1;
+            }
+        }
+        // Momento 1, cuando se cambian parámetros en el buscador y se dispara la actualización por Ajax.
+        if(momento == 1) {
+            
+            search_api_fulltext = $( "input[data-drupal-selector='edit-search-api-fulltext']" ).val();
+            tipo = $( "select[data-drupal-selector='edit-tipo']" ).val();
+            estatus = $( "select[data-drupal-selector='edit-status']" ).val();
+            autor = $( "input[data-drupal-selector='edit-autor']" ).val();
+            taxonomy = $( "input[data-drupal-selector='edit-taxonomy']" ).val();
+            created_min = $( "input[data-drupal-selector='edit-created-min']" ).val();
+            created_max = $( "input[data-drupal-selector='edit-created-max']" ).val();
+            filename_op = $( "select[data-drupal-selector='edit-filename-op']" ).val();
+            filename_1_op = $( "select[data-drupal-selector='edit-filename-1-op']" ).val();
+            filename_2_op = $( "select[data-drupal-selector='edit-filename-2-op']" ).val();
+            title_op = $( "select[data-drupal-selector='edit-title-op']" ).val();
+            
+            conteo = 11;
+        }
+        
+        if(conteo == 11) {
+            
+            // Si los campos no están completos, entonces no se genere el faceting, porque quiere decir que no ha habido búsqueda.
+            
+            let urlFacet = "/pxc-simple-facet-service?search_api_fulltext=" + search_api_fulltext + "&tipo=" + tipo + "&estatus=" + estatus + "&autor=" + autor + "&taxonomy=" + taxonomy + "&created_min=" + created_min + "&created_max=" + created_max + "&filename_op=" + filename_op + "&filename_1_op=" + filename_1_op + "&filename_2_op=" + filename_2_op + "&title_op=" + title_op;
+            
+            /*console.log("Search: " + search_api_fulltext);
+            console.log("Tipo: " + tipo);
+            console.log("Autor: " + autor);
+            console.log("Taxo: " + taxonomy);
+            console.log("F ini: " + created_min);
+            console.log("F fin: " + created_max);
+            console.log("Imagenes: " + filename_op);
+            console.log("Audios: " + filename_1_op);
+            console.log("Videos: " + filename_2_op);
+            console.log("Videos links: " + title_op);
+            console.log("Status: " + estatus);*/
+            // console.log(urlFacet);
+            
+            // console.log("Start Ajax Facets");
+            $.ajax({
+                url: urlFacet,
+                type: 'GET',
+                dataType: 'json',
+                contentType: "application/json",
+                success: callback,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log("Error al recuperar facets:");
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                }
+            });
+            // console.log("End Ajax Facets");
+        }
+    }
+
+// End of Part 1
+});
+})(jQuery); 
+
+//https://drupal.stackexchange.com/questions/287522/how-to-load-a-view-via-ajax-without-breaking-ajax-functionality
+    
